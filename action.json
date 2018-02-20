@@ -1,0 +1,26 @@
+{
+  "actions": [
+    {
+      "description": "Default Welcome Intent",
+      "name": "MAIN",
+      "fulfillment": {
+        "conversationName": "mtg-friend"
+      },
+      "intent": {
+        "name": "actions.intent.MAIN",
+        "trigger": {
+          "queryPatterns": [
+            "talk to MTG friend"
+          ]
+        }
+      }
+    }
+  ],
+  "conversations": {
+    "mtg-friend": {
+      "name": "mtg-friend",
+      "url": "https://us-central1-mtg-friend.cloudfunctions.net/mtgFriend"
+    }
+  },
+  "locale": "en"
+}
