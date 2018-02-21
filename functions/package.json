@@ -7,12 +7,14 @@
     "shell": "firebase experimental:functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test": "mocha"
   },
   "dependencies": {
     "actions-on-google": "^1.5.0",
     "firebase-admin": "~5.8.1",
-    "firebase-functions": "^0.8.1"
+    "firebase-functions": "^0.8.1",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "eslint": "^4.12.0",
