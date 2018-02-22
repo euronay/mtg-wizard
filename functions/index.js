@@ -11,7 +11,9 @@ var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 
 exports.mtgFriend = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
-    var httpRequest = require('request');
+    let httpRequest = require('request');
+    const screenAvailable = app.hasAvailableSurfaceCapabilities(app.SurfaceCapabilities.SCREEN_OUTPUT);
+    
 
     function getDebugInfo() {
         // you can get some userId - but for getting the name, you would
@@ -29,18 +31,24 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
     function handleTextIntent() {
         console.log(`textIntent - ${getDebugInfo()} - at: ${new Date()}`);
         
-        var card = app.getRawInput();
+        var cardRequested = app.getRawInput();
 
-        httpRequest('https://api.scryfall.com/cards/search?q=' + card.replace(' ', '%20'), 
+        httpRequest('https://api.scryfall.com/cards/search?q=' + cardRequested.replace(' ', '%20'), 
             function (error, response, body){
 
-                console.log(body);
 
-                app.tell("You asked for " + card);
+                var apiResponse = JSON.parse(body); 
+                if (apiResponse.object === "error")
+                {
+                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
+                }
+                else
+                {
+                    var card = apiResponse.data[0];
+                    app.ask(`The first card I found was ${card.name} from ${card.set_name}. Find another?`)
+                }
+
             });
-
-        
-
 
 
         console.log(`done textIntent - ${getDebugInfo()}`);
