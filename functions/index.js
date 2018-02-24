@@ -45,7 +45,16 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
                 else
                 {
                     var card = apiResponse.data[0];
-                    app.ask(`The first card I found was ${card.name} from ${card.set_name}. Find another?`)
+                    app.data = card;
+                    app.ask(app.buildRichResponse()
+                        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
+                        .addBasicCard(app.buildBasicCard()
+                            .setTitle(card.name)
+                            .setSubtitle(card.set_name)
+                            .setBodyText(`USD: ${card.usd}<br />EUR: ${card.eur}`)
+                            .setImage(card.image_uris.normal, card.name)
+                        )
+                    );
                 }
 
             });
@@ -60,6 +69,7 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
     actionMap.set(app.StandardIntents.MAIN, handleMainIntent);
 
     actionMap.set(app.StandardIntents.TEXT, handleTextIntent);
+
     
     // apply this map and let the sdk parse and handle the request
     // and your responses
