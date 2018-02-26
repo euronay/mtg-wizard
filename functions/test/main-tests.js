@@ -1,11 +1,16 @@
 var assert = require('assert');
 var httpRequest = require('request');
-describe('httpRequest', function() {
-    it('should return something', function() {
+describe('httpRequest', () => {
+    it('should return nissa', () => {
         httpRequest('https://api.scryfall.com/cards/search?q=nissa', 
-        function (error, response, body){
+        (error, response, body) => {
 
-            console.log(body);
+            var apiResponse = JSON.parse(body);
+
+            apiResponse.data.forEach(element => {
+                console.log(element.name);   
+                console.log(element.image_uris.small);   
+            });
 
         });
     });

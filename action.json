@@ -16,6 +16,16 @@
       }
     },
     {
+      "description": "Options Intent",
+      "name": "OPTION",
+      "fulfillment": {
+        "conversationName": "mtg-friend"
+      },
+      "intent": {
+        "name": "actions.intent.OPTION"
+      }
+    },
+    {
       "description": "Talk Intent",
       "name": "TEXT",
       "fulfillment": {

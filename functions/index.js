@@ -33,8 +33,11 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
         
         var cardRequested = app.getRawInput();
 
-        httpRequest('https://api.scryfall.com/cards/search?q=' + cardRequested.replace(' ', '%20'), 
-            function (error, response, body){
+        var url = `https://api.scryfall.com/cards/search?q=${cardRequested.replace(' ', '%20')}`;
+        console.log(`Calling: ${url}`);
+
+        httpRequest(url, 
+            (error, response, body) => {
 
 
                 var apiResponse = JSON.parse(body); 
@@ -42,25 +45,81 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
                 {
                     app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
                 }
-                else
+                else if (apiResponse.total_cards === 1)
                 {
                     var card = apiResponse.data[0];
                     app.data = card;
-                    app.ask(app.buildRichResponse()
-                        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
-                        .addBasicCard(app.buildBasicCard()
-                            .setTitle(card.name)
-                            .setSubtitle(card.set_name)
-                            .setBodyText(`USD: ${card.usd}<br />EUR: ${card.eur}`)
-                            .setImage(card.image_uris.normal, card.name)
-                        )
-                    );
+                    app.ask(renderCard(card));
+                }
+                else
+                {
+                    var list = app.buildList("Results");
+                    
+                    apiResponse.data.forEach(element => {
+                        list.addItems(renderListItem(element));    
+                    });
+
+                    app.askWithList("I found a few cards. Which one are you interested in?", list);
                 }
 
             });
 
-
         console.log(`done textIntent - ${getDebugInfo()}`);
+    }
+
+    function handleOptionIntent() {
+        console.log(`optionIntent - ${getDebugInfo()} - at: ${new Date()}`);
+        
+        var param = app.getSelectedOption();
+        console.log(param);
+
+        var url = `https://api.scryfall.com/cards/${param}`;
+        console.log(`Calling: ${url}`);
+
+        httpRequest(url, 
+            (error, response, body) => {
+                var apiResponse = JSON.parse(body); 
+                if (apiResponse.object === "error")
+                {
+                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
+                }
+                else (apiResponse.total_cards === 1)
+                {
+                    var card = apiResponse.data[0];
+                    app.data = card;
+                    app.ask(renderCard(card));
+                }
+            });
+
+        console.log(`done optionIntent - ${getDebugInfo()}`);
+    }
+
+    function renderCard(card) {
+        return app.buildRichResponse()
+        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
+        .addBasicCard(app.buildBasicCard()
+            .setTitle(card.name)
+            .setSubtitle(card.set_name)
+            .setBodyText(`USD: ${card.usd}\n  \nEUR: ${card.eur}`)
+            .setImage(getCardImages(card).large, card.name)
+        );
+    }
+    
+    function renderListItem(card) {
+        return app.buildOptionItem(card.id,
+        [card.name])
+        .setTitle(card.name)
+        .setDescription(`${card.type_line}\n  \n${card.mana_cost}\n  \n${card.set_name}`)
+        .setImage(getCardImages(card).small, card.name);
+    }
+
+    function getCardImages(card) {
+        if(card.card_faces){
+            return card.card_faces[0].image_uris;
+        }
+        else {
+            return card.image_uris;
+        }
     }
 
     // finally: create map and handle request
@@ -69,6 +128,8 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
     actionMap.set(app.StandardIntents.MAIN, handleMainIntent);
 
     actionMap.set(app.StandardIntents.TEXT, handleTextIntent);
+
+    actionMap.set(app.StandardIntents.OPTION, handleOptionIntent);
 
     
     // apply this map and let the sdk parse and handle the request
