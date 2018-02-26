@@ -2,13 +2,6 @@ const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
 exports.mtgFriend = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
     let httpRequest = require('request');
@@ -85,7 +78,7 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
                 }
                 else (apiResponse.total_cards === 1)
                 {
-                    var card = apiResponse.data[0];
+                    var card = apiResponse;
                     app.data = card;
                     app.ask(renderCard(card));
                 }
@@ -95,21 +88,29 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
     }
 
     function renderCard(card) {
-        return app.buildRichResponse()
+        var cardResponse = app.buildRichResponse()
         .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
         .addBasicCard(app.buildBasicCard()
             .setTitle(card.name)
             .setSubtitle(card.set_name)
             .setBodyText(`USD: ${card.usd}\n  \nEUR: ${card.eur}`)
             .setImage(getCardImages(card).large, card.name)
-        );
+        )
+        .addSuggestions(['How much is it?', 'Show me printings', 'Is it legal in Modern?', 'Show me rulings']);
+
+        if(card.type_line.indexOf('Legendary Creature') > -1){
+            cardResponse.addSuggestionLink('EDHREC', card.related_uris.edhrec);
+        }
+
+        return cardResponse;
+
     }
     
     function renderListItem(card) {
         return app.buildOptionItem(card.id,
         [card.name])
         .setTitle(card.name)
-        .setDescription(`${card.type_line}\n  \n${card.mana_cost}\n  \n${card.set_name}`)
+        .setDescription(`${card.type_line}\n  \n${card.mana_cost.replace('/[{}]/g', '')}`)
         .setImage(getCardImages(card).small, card.name);
     }
 
