@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 
 
-exports.mtgFriend = functions.https.onRequest((request, response) => {
+exports.scrybot = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
     let httpRequest = require('request');
     const screenAvailable = app.hasAvailableSurfaceCapabilities(app.SurfaceCapabilities.SCREEN_OUTPUT);
@@ -18,13 +18,29 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
 
     function handleMainIntent() {
        console.log(`starting mainIntent - ${getDebugInfo()} - at: ${new Date()}`);
-       app.ask("Hi, what card are you interested in?");
+
+       var triggerQuery = app.getArgument("trigger_query");
+       if(triggerQuery && triggerQuery.indexOf("find ") === 0)
+       {
+           findCard(triggerQuery.substring(5));
+       }
+       else
+       {
+           app.ask("Hi! Name a card and I'll try and find it.");
+       }
+
+       console.log(`done mainIntent - ${getDebugInfo()}`);
     }
 
     function handleTextIntent() {
         console.log(`textIntent - ${getDebugInfo()} - at: ${new Date()}`);
         
-        var cardRequested = app.getRawInput();
+        findCard(app.getRawInput());
+
+        console.log(`done textIntent - ${getDebugInfo()}`);
+    }
+
+    function findCard(cardRequested) {
 
         var url = `https://api.scryfall.com/cards/search?q=${cardRequested.replace(' ', '%20')}`;
         console.log(`Calling: ${url}`);
@@ -57,7 +73,6 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
 
             });
 
-        console.log(`done textIntent - ${getDebugInfo()}`);
     }
 
     function handleOptionIntent() {
@@ -88,38 +103,50 @@ exports.mtgFriend = functions.https.onRequest((request, response) => {
     }
 
     function renderCard(card) {
+    
+        var cardFace = getCardFace(card);
+
         var cardResponse = app.buildRichResponse()
         .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
         .addBasicCard(app.buildBasicCard()
             .setTitle(card.name)
             .setSubtitle(card.set_name)
-            .setBodyText(`USD: ${card.usd}\n  \nEUR: ${card.eur}`)
-            .setImage(getCardImages(card).large, card.name)
+            .setBodyText(`${cardFace.type_line}\n  \n${cardFace.mana_cost.replace('/[{}]/g', '')}\n  \n` + 
+                         `USD: ${card.usd}\n  \nEUR: ${card.eur}`)
+            .setImage(cardFace.image_uris.large, card.name)
         )
-        .addSuggestions(['How much is it?', 'Show me printings', 'Is it legal in Modern?', 'Show me rulings']);
+        //.addSuggestions(['How much is it?', 'Show me printings', 'Is it legal in Modern?', 'Show me rulings']);
 
-        if(card.type_line.indexOf('Legendary Creature') > -1){
-            cardResponse.addSuggestionLink('EDHREC', card.related_uris.edhrec);
-        }
+        // if(card.type_line.indexOf('Legendary Creature') > -1){
+        //     cardResponse.addSuggestionLink('EDHREC', card.related_uris.edhrec);
+        // }
 
         return cardResponse;
 
     }
     
     function renderListItem(card) {
-        return app.buildOptionItem(card.id,
+
+        var cardFace = getCardFace(card);
+
+        var listItem = app.buildOptionItem(card.id,
         [card.name])
         .setTitle(card.name)
-        .setDescription(`${card.type_line}\n  \n${card.mana_cost.replace('/[{}]/g', '')}`)
-        .setImage(getCardImages(card).small, card.name);
+        .setDescription(`${cardFace.type_line}\n  \n${cardFace.mana_cost.replace('/[{}]/g', '')}`)
+        .setImage(cardFace.image_uris.small, card.name);
+
+        return listItem;
     }
 
-    function getCardImages(card) {
-        if(card.card_faces){
-            return card.card_faces[0].image_uris;
+
+    // DFC support
+    function getCardFace(card, face) {
+        if(card.layout == "transform"){
+            if (!face) { face = 0 }
+            return card.card_faces[face]
         }
         else {
-            return card.image_uris;
+            return card;
         }
     }
 

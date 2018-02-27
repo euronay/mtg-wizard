@@ -4,13 +4,14 @@
       "description": "Default Welcome Intent",
       "name": "MAIN",
       "fulfillment": {
-        "conversationName": "mtg-friend"
+        "conversationName": "scrybot"
       },
       "intent": {
         "name": "actions.intent.MAIN",
         "trigger": {
           "queryPatterns": [
-            "talk to MTG friend"
+            "talk to Scrybot",
+            "ask Scrybot to find $card"
           ]
         }
       }
@@ -19,7 +20,7 @@
       "description": "Options Intent",
       "name": "OPTION",
       "fulfillment": {
-        "conversationName": "mtg-friend"
+        "conversationName": "scrybot"
       },
       "intent": {
         "name": "actions.intent.OPTION"
@@ -29,7 +30,7 @@
       "description": "Talk Intent",
       "name": "TEXT",
       "fulfillment": {
-        "conversationName": "mtg-friend"
+        "conversationName": "scrybot"
       },
       "intent": {
         "name": "actions.intent.TEXT"
@@ -38,8 +39,8 @@
   ],
   "conversations": {
     "mtg-friend": {
-      "name": "mtg-friend",
-      "url": "https://us-central1-mtg-friend.cloudfunctions.net/mtgFriend"
+      "name": "scrybot",
+      "url": "https://us-central1-scrybot-mtg.cloudfunctions.net/scrybot"
     }
   },
   "locale": "en"
