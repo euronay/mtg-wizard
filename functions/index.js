@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
+var Card = require('./card.js');
 
 
 exports.scrybot = functions.https.onRequest((request, response) => {
@@ -56,16 +57,16 @@ exports.scrybot = functions.https.onRequest((request, response) => {
                 }
                 else if (apiResponse.total_cards === 1)
                 {
-                    var card = apiResponse.data[0];
-                    app.data = card;
-                    app.ask(renderCard(card));
+                    var card = new Card(apiResponse.data[0]);
+                    app.ask(card.renderAsCard(app));
                 }
                 else
                 {
                     var list = app.buildList("Results");
                     
                     apiResponse.data.forEach(element => {
-                        list.addItems(renderListItem(element));    
+                        var card = new Card(element);
+                        list.addItems(card.renderAsListItem(app));    
                     });
 
                     app.askWithList("I found a few cards. Which one are you interested in?", list);
@@ -93,62 +94,15 @@ exports.scrybot = functions.https.onRequest((request, response) => {
                 }
                 else (apiResponse.total_cards === 1)
                 {
-                    var card = apiResponse;
-                    app.data = card;
-                    app.ask(renderCard(card));
+                    var card = new Card(apiResponse);
+                    app.ask(card.renderAsCard(app));
                 }
             });
 
         console.log(`done optionIntent - ${getDebugInfo()}`);
     }
 
-    function renderCard(card) {
-    
-        var cardFace = getCardFace(card);
 
-        var cardResponse = app.buildRichResponse()
-        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
-        .addBasicCard(app.buildBasicCard()
-            .setTitle(card.name)
-            .setSubtitle(card.set_name)
-            .setBodyText(`${cardFace.type_line}\n  \n${cardFace.mana_cost.replace('/[{}]/g', '')}\n  \n` + 
-                         `USD: ${card.usd}\n  \nEUR: ${card.eur}`)
-            .setImage(cardFace.image_uris.large, card.name)
-        )
-        //.addSuggestions(['How much is it?', 'Show me printings', 'Is it legal in Modern?', 'Show me rulings']);
-
-        // if(card.type_line.indexOf('Legendary Creature') > -1){
-        //     cardResponse.addSuggestionLink('EDHREC', card.related_uris.edhrec);
-        // }
-
-        return cardResponse;
-
-    }
-    
-    function renderListItem(card) {
-
-        var cardFace = getCardFace(card);
-
-        var listItem = app.buildOptionItem(card.id,
-        [card.name])
-        .setTitle(card.name)
-        .setDescription(`${cardFace.type_line}\n  \n${cardFace.mana_cost.replace('/[{}]/g', '')}`)
-        .setImage(cardFace.image_uris.small, card.name);
-
-        return listItem;
-    }
-
-
-    // DFC support
-    function getCardFace(card, face) {
-        if(card.layout == "transform"){
-            if (!face) { face = 0 }
-            return card.card_faces[face]
-        }
-        else {
-            return card;
-        }
-    }
 
     // finally: create map and handle request
     // map all intents to specific functions
