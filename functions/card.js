@@ -9,7 +9,7 @@ module.exports = class Card {
 
         var card = app.buildBasicCard()
         .setTitle(this.data.name)
-        .setSubtitle(`${this.data.set_name}`)
+        .setSubtitle(`${this.data.set_name} - ${this.data.rarity}`)
         .setImageDisplay('WHITE')
         .addButton("View on Scryfall", this.data.scryfall_uri);
 
@@ -55,7 +55,7 @@ module.exports = class Card {
         var listItem = app.buildOptionItem(this.data.id,
         [this.data.name])
         .setTitle(this.data.name)
-        .setDescription(`${cardFace.type_line}\n  \n${cardFace.mana_cost.replace('/[{}]/g', '')}`)
+        .setDescription(`${this.data.set_name} - ${this.data.rarity}  \n${cardFace.mana_cost} ${cardFace.type_line}`)
         .setImage(this.getImages().small, this.data.name);
 
         return listItem;
