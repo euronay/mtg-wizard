@@ -10,14 +10,13 @@ module.exports = class Api {
             request('https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20'))
             .then(response => {
                 var data = JSON.parse(response);
-                if (data.object === "error")
-                {
-                    resolve(null);
-                }
-                else
-                {
-                    resolve(data.data.map(element => new Card(element)));     
-                }
+                
+                if (data.object === "error"){
+                    throw new Error("Card not found");
+                }   
+                
+                resolve(data.data.map(element => new Card(element)));     
+                
             })
             .catch((err) => {
                 console.log(err);

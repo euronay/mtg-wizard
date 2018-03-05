@@ -13,6 +13,8 @@ module.exports = class Card {
         this.eur = cardData.eur;
         this.image = cardData.image_uris.large;
         this.thumbnail = cardData.image_uris.small;
+        this.reprint = cardData.reprint;
+        this.prints_uri = cardData.prints_search_uri;
     }
 
     getName(){
