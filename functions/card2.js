@@ -1,33 +1,46 @@
 module.exports = class Card {
 
-
     constructor(cardData){
-        this.data = cardData;
+        this.id = cardData.id
+        this.name = cardData.name;
+        this.set = cardData.set;
+        this.set_name = cardData.set_name;
+        this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
+        this.mana_cost = cardData.mana_cost;
+        this.type_line = cardData.type_line;
+        this.oracle_text = cardData.oracle_text;
+        this.usd = cardData.usd;
+        this.eur = cardData.eur;
+        this.image = cardData.image_uris.large;
+        this.thumbnail = cardData.image_uris.small;
     }
 
     getName(){
-        return this.data.name;
+        return this.name;
     }
 
     getSetAndRarity(){
-        return `${this.data.set_name} <${this.data.rarity}>`;
+        return `${this.set_name} ${this.rarity}`;
     }
 
     getManaCostAndType(){
-        return `${this.data.mana_cost}  ${this.data.type_line}`;
+        if (this.mana_cost)
+            return `${this.mana_cost}  ${this.type_line}`;
+        else
+            return this.type_line;
     }
 
     getBodyText(){
         // TODO maximum of 8 lines before we run out of room
-        return this.data.oracle_text.replace(/\n/g, '\n  \n');
+        return this.oracle_text.replace(/\n/g, '\n  \n');
     }
 
     getPrices(){
-        return `USD: ${this.data.usd} / EUR: ${this.data.eur}`;
+        return `USD: ${this.usd} / EUR: ${this.eur}`;
     }
 
-    getImage(size) {
-        return this.data.image_uris[size];
+    getImage() {
+        return this.image;
     }
 
 }

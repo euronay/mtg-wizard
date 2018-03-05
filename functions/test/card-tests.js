@@ -98,7 +98,7 @@ describe('singleCard', () => {
             assert.equal(chandra.getName(), "Chandra, Flamecaller");
         });
         it('should have correct set and rarity', () => {
-            assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch <mythic>");
+            assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch M");
         });
         it('should have correct mana cost and type', () => {
             assert.equal(chandra.getManaCostAndType(), "{4}{R}{R}  Legendary Planeswalker — Chandra");
@@ -110,7 +110,7 @@ describe('singleCard', () => {
             assert.equal(chandra.getPrices(), "USD: 1.97 / EUR: 2.74");
         });
         it('should have correct image', () => {
-            assert.equal(chandra.getImage("large"), "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
+            assert.equal(chandra.getImage(), "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
         });
     });
 });
