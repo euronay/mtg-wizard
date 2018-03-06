@@ -3,24 +3,52 @@ var request = require('request-promise');
 
 module.exports = class Api {
 
-     static searchCard(query){
-        //TODO properly escape string
+     static searchCards(query){
         return new Promise((resolve, reject) => {
-
-            request('https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20'))
+            //TODO properly escape string
+            var uri = 'https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20');
+            console.log(`Calling ${uri}`);
+            request(uri)
             .then(response => {
                 var data = JSON.parse(response);
-                
-                if (data.object === "error"){
-                    throw new Error("Card not found");
-                }   
+                resolve(data.data.map(element => new Card(element)));     
+            })
+            .catch(error => {
+                reject(JSON.parse(error.error));
+            });
+        });
+    }
+
+    static getCard(cardId){
+        return new Promise((resolve, reject) => {
+            var uri = 'https://api.scryfall.com/cards/' + cardId;
+            console.log(`Calling ${uri}`);
+            request(uri)
+            .then(response => {
+                var data = JSON.parse(response);
+                resolve(new Card(data));     
+            })
+            .catch(error => {
+                if(error.error){ // TODO For some reason error.error returns undefined and then the error
+                    reject(JSON.parse(error.error));
+                }
+            });
+        });
+    }
+
+    static findPrints(card){
+        return new Promise((resolve, reject) => {
+            console.log(`Calling ${card.prints_uri}`);
+            request(card.prints_uri)
+            .then(response => {
+                var data = JSON.parse(response);
                 
                 resolve(data.data.map(element => new Card(element)));     
                 
             })
-            .catch((err) => {
-                console.log(err);
-                reject(err)});
+            .catch(error => {
+                reject(JSON.parse(error.error));
+            });
         });
     }
 

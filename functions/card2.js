@@ -3,8 +3,9 @@ module.exports = class Card {
     constructor(cardData){
         this.id = cardData.id
         this.name = cardData.name;
-        this.set = cardData.set;
+        this.set = cardData.set.toUpperCase();
         this.set_name = cardData.set_name;
+        this.layout = cardData.layout;
         this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
         this.mana_cost = cardData.mana_cost;
         this.type_line = cardData.type_line;
@@ -15,11 +16,9 @@ module.exports = class Card {
         this.thumbnail = cardData.image_uris.small;
         this.reprint = cardData.reprint;
         this.prints_uri = cardData.prints_search_uri;
+        this.scryfall_uri = cardData.scryfall_uri;
     }
 
-    getName(){
-        return this.name;
-    }
 
     getSetAndRarity(){
         return `${this.set_name} ${this.rarity}`;
@@ -41,8 +40,5 @@ module.exports = class Card {
         return `USD: ${this.usd} / EUR: ${this.eur}`;
     }
 
-    getImage() {
-        return this.image;
-    }
 
 }

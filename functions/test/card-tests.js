@@ -95,7 +95,10 @@ describe('singleCard', () => {
     describe('chandra', () => {
         var chandra = new Card(chandraData);
         it('should have correct name', () => {
-            assert.equal(chandra.getName(), "Chandra, Flamecaller");
+            assert.equal(chandra.name, "Chandra, Flamecaller");
+        });
+        it('should have correct set', () => {
+            assert.equal(chandra.set, "OGW");
         });
         it('should have correct set and rarity', () => {
             assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch M");
@@ -110,7 +113,7 @@ describe('singleCard', () => {
             assert.equal(chandra.getPrices(), "USD: 1.97 / EUR: 2.74");
         });
         it('should have correct image', () => {
-            assert.equal(chandra.getImage(), "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
+            assert.equal(chandra.image, "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
         });
     });
 });
