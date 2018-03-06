@@ -36,24 +36,32 @@ exports.scrybot = functions.https.onRequest((request, response) => {
     function handleTextIntent() {
         console.log(`textIntent - ${getDebugInfo()} - at: ${new Date()}`);
         
-        var command = app.getRawInput();
+        var command = app.getRawInput().toLowerCase();
 
         if((command === "reprints" || command === "prints") && app.data.card){
             Api.findPrints(app.data.card)
             .then(reprints => {
                 var list = app.buildList("Results");
-                    
-                reprints.forEach(card => {
-                    list.addItems(renderListItem(card, true));    
-                });
-
-                app.askWithList(`I found these reprints of ${app.data.card.name}.`, list);
-                app.data.card = null;
+                
+                if(reprints.length === 1){
+                    app.ask(`The only printing of ${app.data.card.name} is in ${app.data.card.set_name}. Find another card?`);
+                }
+                else {
+                    reprints.forEach(card => {
+                        list.addItems(renderListItem(card, true));    
+                    });
+    
+                    app.askWithList(`I found these reprints of ${app.data.card.name}.`, list);
+                    app.data.card = null;
+                }               
             })
             .catch(error => {
                 console.log(error);
                 app.tell("Sorry an error occurred");
             });
+        }
+        else if(command === "bye" || command === "thanks"){
+            app.tell('Thanks for using Scrybot!');
         }
         else
         {

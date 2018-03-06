@@ -1,22 +1,27 @@
 module.exports = class Card {
 
     constructor(cardData){
-        this.id = cardData.id
-        this.name = cardData.name;
-        this.set = cardData.set.toUpperCase();
-        this.set_name = cardData.set_name;
-        this.layout = cardData.layout;
-        this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
-        this.mana_cost = cardData.mana_cost;
-        this.type_line = cardData.type_line;
-        this.oracle_text = cardData.oracle_text;
-        this.usd = cardData.usd;
-        this.eur = cardData.eur;
-        this.image = cardData.image_uris.large;
-        this.thumbnail = cardData.image_uris.small;
-        this.reprint = cardData.reprint;
-        this.prints_uri = cardData.prints_search_uri;
-        this.scryfall_uri = cardData.scryfall_uri;
+        try{
+            this.id = cardData.id
+            this.name = cardData.name;
+            this.set = cardData.set.toUpperCase();
+            this.set_name = cardData.set_name;
+            this.layout = cardData.layout;
+            this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
+            this.mana_cost = cardData.mana_cost;
+            this.type_line = cardData.type_line;
+            this.oracle_text = cardData.oracle_text;
+            this.usd = cardData.usd;
+            this.eur = cardData.eur;
+            this.image = cardData.image_uris.large;
+            this.thumbnail = cardData.image_uris.small;
+            this.reprint = cardData.reprint;
+            this.prints_uri = cardData.prints_search_uri;
+            this.scryfall_uri = cardData.scryfall_uri;
+        }
+        catch(ex){
+            console.error(ex);
+        }
     }
 
 
@@ -39,6 +44,5 @@ module.exports = class Card {
     getPrices(){
         return `USD: ${this.usd} / EUR: ${this.eur}`;
     }
-
 
 }

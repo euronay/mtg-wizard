@@ -3,7 +3,7 @@ var Api = require('../api/api.js');
 
 describe('get card by id', () => {
     it('should return nissa steward of elements', () => {
-        Api.getCard("c79036a1-2239-4d4f-8b58-6cf9ac4863fc")
+        return Api.getCard("c79036a1-2239-4d4f-8b58-6cf9ac4863fc")
         .then(card => {
             assert.equal(card.name, 'Nissa, Steward of Elements');
         })
@@ -11,7 +11,7 @@ describe('get card by id', () => {
     });
 
     it('throw an error', () => {
-        Api.getCard("sdfsdf")
+        return Api.getCard("sdfsdf")
         .then(card => {})
         .catch(error => {
             assert.equal(error.code, 'not_found');
@@ -21,7 +21,7 @@ describe('get card by id', () => {
 
 describe('saerch for card', () => {
     it('should return topan freeblade', () => {
-        Api.searchCards("topan freeblade")
+        return Api.searchCards("topan freeblade")
         .then(cards => {
             assert.equal(cards[0].name, 'Topan Freeblade');
         })
@@ -29,7 +29,7 @@ describe('saerch for card', () => {
     });
 
     it('should find no cards', () => {
-        Api.searchCards("sdfsdf")
+        return Api.searchCards("sdfsdf")
         .then(cards => {})
         .catch(error => {
             assert.equal(error.code, 'not_found');
@@ -42,7 +42,7 @@ describe('get reprints', () => {
     it('should find ori and ima ', () => {
         Api.searchCards("topan freeblade")
         .then(cards => {
-            Api.findPrints(cards[0])
+            return Api.findPrints(cards[0])
             .then(reprints => {
                 // TODO - this test will break if another reprint is printed
                 assert.equal(reprints[0].set, "ima");

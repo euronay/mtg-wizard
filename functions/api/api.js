@@ -8,13 +8,15 @@ module.exports = class Api {
             //TODO properly escape string
             var uri = 'https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20');
             console.log(`Calling ${uri}`);
-            request(uri)
+            request(uri, {timeout: 5000})
             .then(response => {
                 var data = JSON.parse(response);
                 resolve(data.data.map(element => new Card(element)));     
             })
             .catch(error => {
-                reject(JSON.parse(error.error));
+                if(error.error){
+                    reject(JSON.parse(error.error));
+                }
             });
         });
     }
@@ -23,10 +25,12 @@ module.exports = class Api {
         return new Promise((resolve, reject) => {
             var uri = 'https://api.scryfall.com/cards/' + cardId;
             console.log(`Calling ${uri}`);
-            request(uri)
+            request(uri, {timeout: 5000})
             .then(response => {
                 var data = JSON.parse(response);
-                resolve(new Card(data));     
+                if(data){
+                    resolve(new Card(data));     
+                }
             })
             .catch(error => {
                 if(error.error){ // TODO For some reason error.error returns undefined and then the error
@@ -39,15 +43,18 @@ module.exports = class Api {
     static findPrints(card){
         return new Promise((resolve, reject) => {
             console.log(`Calling ${card.prints_uri}`);
-            request(card.prints_uri)
+            request(card.prints_uri, {timeout: 5000})
             .then(response => {
                 var data = JSON.parse(response);
-                
-                resolve(data.data.map(element => new Card(element)));     
+                if(data.data){
+                    resolve(data.data.map(element => new Card(element)));    
+                } 
                 
             })
             .catch(error => {
-                reject(JSON.parse(error.error));
+                if(error.error){
+                    reject(JSON.parse(error.error));
+                }
             });
         });
     }
