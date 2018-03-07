@@ -1,4 +1,4 @@
-var Card = require('../card2.js');
+var CardFactory = require('../cardfactory.js');
 var request = require('request-promise');
 
 module.exports = class Api {
@@ -11,7 +11,7 @@ module.exports = class Api {
             request(uri, {timeout: 5000})
             .then(response => {
                 var data = JSON.parse(response);
-                resolve(data.data.map(element => new Card(element)));     
+                resolve(data.data.map(element => CardFactory.createCard(element)));     
             })
             .catch(error => {
                 if(error.error){
@@ -29,7 +29,7 @@ module.exports = class Api {
             .then(response => {
                 var data = JSON.parse(response);
                 if(data){
-                    resolve(new Card(data));     
+                    resolve(CardFactory.createCard(data));     
                 }
             })
             .catch(error => {
@@ -47,7 +47,7 @@ module.exports = class Api {
             .then(response => {
                 var data = JSON.parse(response);
                 if(data.data){
-                    resolve(data.data.map(element => new Card(element)));    
+                    resolve(data.data.map(element => CardFactory.createCard(element)));    
                 } 
                 
             })

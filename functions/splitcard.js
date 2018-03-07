@@ -1,7 +1,9 @@
-module.exports = class Card {
+var Card = require('./card2.js');
+
+module.exports = class SplitCard extends Card {
 
     constructor(cardData){
-        this.initialise(cardData);
+        super(cardData);
     }
 
     initialise(cardData){
@@ -14,7 +16,7 @@ module.exports = class Card {
             this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
             this.mana_cost = cardData.mana_cost;
             this.type_line = cardData.type_line;
-            this.oracle_text = cardData.oracle_text;
+
             this.usd = cardData.usd;
             this.eur = cardData.eur;
             this.image = cardData.image_uris.large;
@@ -28,32 +30,9 @@ module.exports = class Card {
         }
     }
 
-    getSetAndRarity(){
-        return `${this.set_name} ${this.rarity}`;
-    }
-
-    getManaCostAndType(){
-        if (this.mana_cost)
-            return `${this.mana_cost}  ${this.type_line}`;
-        else
-            return this.type_line;
-    }
-
     getBodyText(){
         // TODO maximum of 8 lines before we run out of room
-        return this.oracle_text.replace(/\n/g, '\n  \n');
-    }
-
-    getPrices(){
-        return `USD: ${this.usd} / EUR: ${this.eur}`;
-    }
-
-    getImage(){
-        return this.image;
-    }
-
-    getThumbnail(){
-        return this.thumbnail;
+        return 'TODO Split Card';
     }
 
 }

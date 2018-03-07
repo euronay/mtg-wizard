@@ -19,11 +19,19 @@ describe('get card by id', () => {
     });
 });
 
-describe('saerch for card', () => {
+describe('search for card', () => {
     it('should return topan freeblade', () => {
         return Api.searchCards("topan freeblade")
         .then(cards => {
             assert.equal(cards[0].name, 'Topan Freeblade');
+        })
+        .catch(error => {});
+    });
+
+    it('should return wear//tear ', () => {
+        return Api.searchCards("wear tear")
+        .then(cards => {
+            assert.equal(cards[0].name, 'Wear // Tear');
         })
         .catch(error => {});
     });

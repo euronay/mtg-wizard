@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 var Api = require('./api/api.js');
 var Card = require('./card2.js');
+var SplitCard = require('./splitcard.js');
 
 
 exports.scrybot = functions.https.onRequest((request, response) => {
@@ -23,7 +24,8 @@ exports.scrybot = functions.https.onRequest((request, response) => {
        var triggerQuery = app.getArgument("trigger_query");
        if(triggerQuery && triggerQuery.indexOf("find ") === 0)
        {
-           findCard(triggerQuery.substring(5));
+           //TODO
+           //findCard(triggerQuery.substring(5));
        }
        else
        {
@@ -122,25 +124,14 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         .setTitle(card.name)
         .setSubtitle(card.getSetAndRarity())
         .setImageDisplay('WHITE')
-        .addButton("View on Scryfall", card.scryfall_uri);
+        .addButton("View on Scryfall", card.scryfall_uri)
+        .setBodyText(
+            `**${card.getManaCostAndType()}**\n  \n` + 
+            `${card.getBodyText()}\n  \n` + 
+            `*${card.getPrices()}*`
+        )
+        .setImage(card.getImage(), card.name);
 
-        switch(card.layout)
-        {
-            case("normal"): 
-                displayCard.setBodyText(
-                `**${card.getManaCostAndType()}**\n  \n` + 
-                `${card.getBodyText()}\n  \n` + 
-                `*${card.getPrices()}*`
-                );
-                displayCard.setImage(card.image, card.name);
-                break;
-            case("split"): 
-                displayCard.setBodyText("TODO Split Card");
-                break;
-            case("transform"):
-                isplayCard.setBodyText("TODO Transform Card");
-                break;
-        }
         var response = app.buildRichResponse()
         .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
         .addBasicCard(displayCard);
@@ -152,7 +143,7 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         [card.name])
         .setTitle(card.name)
         .setDescription(`${card.getSetAndRarity()}  \n  \n${card.getManaCostAndType()}`)
-        .setImage(card.thumbnail, card.name);
+        .setImage(card.getThumbnail(), card.name);
 
         if(showSet)
             listItem.setTitle(`${card.name} (${card.set})`);
