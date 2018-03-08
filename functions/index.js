@@ -1,11 +1,11 @@
 const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-var Card = require('./card.js');
+var Api = require('./api/api.js');
+var DualCard = require('./card/dualcard.js');
 
 
 exports.scrybot = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
-    let httpRequest = require('request');
     const screenAvailable = app.hasAvailableSurfaceCapabilities(app.SurfaceCapabilities.SCREEN_OUTPUT);
     
 
@@ -23,7 +23,8 @@ exports.scrybot = functions.https.onRequest((request, response) => {
        var triggerQuery = app.getArgument("trigger_query");
        if(triggerQuery && triggerQuery.indexOf("find ") === 0)
        {
-           findCard(triggerQuery.substring(5));
+           //TODO
+           //findCard(triggerQuery.substring(5));
        }
        else
        {
@@ -36,70 +37,124 @@ exports.scrybot = functions.https.onRequest((request, response) => {
     function handleTextIntent() {
         console.log(`textIntent - ${getDebugInfo()} - at: ${new Date()}`);
         
-        findCard(app.getRawInput());
+        var command = app.getRawInput().toLowerCase();
 
-        console.log(`done textIntent - ${getDebugInfo()}`);
-    }
-
-    function findCard(cardRequested) {
-
-        var url = `https://api.scryfall.com/cards/search?q=${cardRequested.replace(' ', '%20')}`;
-        console.log(`Calling: ${url}`);
-
-        httpRequest(url, 
-            (error, response, body) => {
-
-
-                var apiResponse = JSON.parse(body); 
-                if (apiResponse.object === "error")
-                {
-                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
+        if((command === "reprints" || command === "prints") && app.data.card){
+            Api.findPrints(app.data.card)
+            .then(reprints => {
+                var list = app.buildList("Results");
+                
+                if(reprints.length === 1){
+                    app.ask(`The only printing of ${app.data.card.name} is in ${app.data.card.set_name}. Find another card?`);
                 }
-                else if (apiResponse.total_cards === 1)
-                {
-                    var card = new Card(apiResponse.data[0]);
-                    app.ask(card.renderAsCard(app));
+                else {
+                    reprints.forEach(card => {
+                        list.addItems(renderListItem(card, true));    
+                    });
+    
+                    app.askWithList(`I found these reprints of ${app.data.card.name}.`, list);
+                    app.data.card = null;
+                }               
+            })
+            .catch(error => {
+                console.log(error);
+                app.tell("Sorry an error occurred");
+            });
+        }
+        else if(command === "flip" && app.data.card.layout === "transform"){
+            var dualCard = new DualCard();
+            Object.assign(dualCard, app.data.card);
+            dualCard.flip();
+            app.data.card = dualCard;
+            app.ask(renderCard(dualCard));
+        }
+        else if(command === "bye" || command === "thanks"){
+            app.tell('Thanks for using Scrybot!');
+        }
+        else
+        {
+            Api.searchCards(command)
+            .then(cards => {
+                if(cards.length === 1){
+                    app.data.card = cards[0];
+                    app.ask(renderCard(cards[0]));
                 }
-                else
-                {
+                else {
+                    app.data.card = null;
                     var list = app.buildList("Results");
                     
-                    apiResponse.data.forEach(element => {
-                        var card = new Card(element);
-                        list.addItems(card.renderAsListItem(app));    
+                    cards.forEach(card => {
+                        list.addItems(renderListItem(card));    
                     });
 
                     app.askWithList("I found a few cards. Which one are you interested in?", list);
                 }
-
+            })
+            .catch(error => {
+                if(error.code === 'not_found'){
+                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
+                }
+                else{
+                    console.log(error);
+                    app.tell("Sorry an error occurred");
+                }
             });
+        }
 
+        console.log(`done textIntent - ${getDebugInfo()}`);
     }
+
 
     function handleOptionIntent() {
         console.log(`optionIntent - ${getDebugInfo()} - at: ${new Date()}`);
         
-        var param = app.getSelectedOption();
-        console.log(param);
+        var cardId = app.getSelectedOption();
+        console.log(`Getting card id ${cardId}`);
 
-        var url = `https://api.scryfall.com/cards/${param}`;
-        console.log(`Calling: ${url}`);
-
-        httpRequest(url, 
-            (error, response, body) => {
-                var apiResponse = JSON.parse(body); 
-                if (apiResponse.object === "error")
-                {
-                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
-                }
-                else (apiResponse.total_cards === 1)
-                {
-                    var card = new Card(apiResponse);
-                    app.ask(card.renderAsCard(app));
-                }
-            });
+        Api.getCard(cardId)
+        .then(card => {
+            app.data.card = card;
+            app.ask(renderCard(card));
+        })
+        .catch(error => {
+            console.log(error);
+            app.tell("Sorry an error occurred");
+        });
 
         console.log(`done optionIntent - ${getDebugInfo()}`);
+    }
+
+    function renderCard(card){
+
+        var displayCard = app.buildBasicCard()
+        .setTitle(card.getDisplayName())
+        .setSubtitle(card.getSetAndRarity())
+        .setImageDisplay('WHITE')
+        .addButton("View on Scryfall", card.scryfall_uri)
+        .setBodyText(
+            `**${card.getManaCostAndType()}**\n  \n` + 
+            `${card.getBodyText()}\n  \n` + 
+            `*${card.getPrices()}*`
+        )
+        .setImage(card.getImage(), card.name);
+
+        var response = app.buildRichResponse()
+        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
+        .addBasicCard(displayCard);
+        return response;
+    }
+
+    function renderListItem(card, showSet){
+        var listItem = app.buildOptionItem(card.id,
+        [card.name])
+        .setTitle(card.name)
+        .setDescription(`${card.getSetAndRarity()}  \n  \n${card.getManaCostAndType()}`)
+        .setImage(card.getThumbnail(), card.name);
+
+        if(showSet)
+            listItem.setTitle(`${card.name} (${card.set})`);
+
+        return listItem;
     }
 
 
