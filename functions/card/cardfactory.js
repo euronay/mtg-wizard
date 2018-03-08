@@ -1,5 +1,6 @@
-var Card = require('./card2.js');
+var Card = require('./card.js');
 var SplitCard = require('./splitcard.js');
+var DualCard = require('./dualcard.js');
 
 module.exports = class CardFactory{
 
@@ -11,6 +12,9 @@ module.exports = class CardFactory{
             case "split":
                 console.log(`Returning split card ${cardData.name}`);
                 return new SplitCard(cardData);
+            case "transform":
+                console.log(`Returning transform card ${cardData.name}`);
+                return new DualCard(cardData);
             default:
                 throw new Error(`Card type ${cardData.layout} is not supported`);
         }

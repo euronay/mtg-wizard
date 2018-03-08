@@ -1,8 +1,7 @@
 const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 var Api = require('./api/api.js');
-var Card = require('./card2.js');
-var SplitCard = require('./splitcard.js');
+var DualCard = require('./card/dualcard.js');
 
 
 exports.scrybot = functions.https.onRequest((request, response) => {
@@ -61,6 +60,13 @@ exports.scrybot = functions.https.onRequest((request, response) => {
                 console.log(error);
                 app.tell("Sorry an error occurred");
             });
+        }
+        else if(command === "flip" && app.data.card.layout === "transform"){
+            var dualCard = new DualCard();
+            Object.assign(dualCard, app.data.card);
+            dualCard.flip();
+            app.data.card = dualCard;
+            app.ask(renderCard(dualCard));
         }
         else if(command === "bye" || command === "thanks"){
             app.tell('Thanks for using Scrybot!');
@@ -121,7 +127,7 @@ exports.scrybot = functions.https.onRequest((request, response) => {
     function renderCard(card){
 
         var displayCard = app.buildBasicCard()
-        .setTitle(card.name)
+        .setTitle(card.getDisplayName())
         .setSubtitle(card.getSetAndRarity())
         .setImageDisplay('WHITE')
         .addButton("View on Scryfall", card.scryfall_uri)

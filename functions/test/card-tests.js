@@ -1,6 +1,7 @@
 var assert = require('assert');
-var CardFactory = require('../cardfactory.js');
-var SplitCard = require('../splitcard.js');
+var CardFactory = require('../card/cardfactory.js');
+var SplitCard = require('../card/splitcard.js');
+var DualCard = require('../card/dualcard.js');
 
 //#region test data
     var chandraData = {
@@ -195,6 +196,125 @@ var SplitCard = require('../splitcard.js');
             "coolstuffinc": "https://www.coolstuffinc.com/p/Magic%3A+The+Gathering/Wear+%2F%2F+Tear?utm_source=scryfall"
         }
     };
+
+    var nissaData = {
+            "object": "card",
+            "id": "ff0063da-ab6b-499d-8e87-8b34d46f0372",
+            "oracle_id": "35754a21-9fba-4370-a254-292918a777ba",
+            "multiverse_ids": [
+                398438,
+                398439
+            ],
+            "mtgo_id": 58056,
+            "mtgo_foil_id": 58057,
+            "name": "Nissa, Vastwood Seer // Nissa, Sage Animist",
+            "uri": "https://api.scryfall.com/cards/ori/189",
+            "scryfall_uri": "https://scryfall.com/card/ori/189?utm_source=api",
+            "layout": "transform",
+            "highres_image": true,
+            "cmc": 3,
+            "color_identity": [
+                "G"
+            ],
+            "card_faces": [
+                {
+                    "object": "card_face",
+                    "name": "Nissa, Vastwood Seer",
+                    "mana_cost": "{2}{G}",
+                    "type_line": "Legendary Creature — Elf Scout",
+                    "oracle_text": "When Nissa, Vastwood Seer enters the battlefield, you may search your library for a basic Forest card, reveal it, put it into your hand, then shuffle your library.\nWhenever a land enters the battlefield under your control, if you control seven or more lands, exile Nissa, then return her to the battlefield transformed under her owner's control.",
+                    "colors": [
+                        "G"
+                    ],
+                    "power": "2",
+                    "toughness": "2",
+                    "illustration_id": "a7c585e9-d1b0-4c1c-953c-ee851f1551cc",
+                    "image_uris": {
+                        "small": "https://img.scryfall.com/cards/small/en/ori/189a.jpg?1518205598",
+                        "normal": "https://img.scryfall.com/cards/normal/en/ori/189a.jpg?1518205598",
+                        "large": "https://img.scryfall.com/cards/large/en/ori/189a.jpg?1518205598",
+                        "png": "https://img.scryfall.com/cards/png/en/ori/189a.png?1518205598",
+                        "art_crop": "https://img.scryfall.com/cards/art_crop/en/ori/189a.jpg?1518205598",
+                        "border_crop": "https://img.scryfall.com/cards/border_crop/en/ori/189a.jpg?1518205598"
+                    }
+                },
+                {
+                    "object": "card_face",
+                    "name": "Nissa, Sage Animist",
+                    "mana_cost": "",
+                    "type_line": "Legendary Planeswalker — Nissa",
+                    "oracle_text": "+1: Reveal the top card of your library. If it's a land card, put it onto the battlefield. Otherwise, put it into your hand.\n−2: Create a legendary 4/4 green Elemental creature token named Ashaya, the Awoken World.\n−7: Untap up to six target lands. They become 6/6 Elemental creatures. They're still lands.",
+                    "colors": [
+                        "G"
+                    ],
+                    "color_indicator": [
+                        "G"
+                    ],
+                    "loyalty": "3",
+                    "illustration_id": "434f4e61-10b0-4d97-b275-73aa109ea9aa",
+                    "image_uris": {
+                        "small": "https://img.scryfall.com/cards/small/en/ori/189b.jpg?1518205598",
+                        "normal": "https://img.scryfall.com/cards/normal/en/ori/189b.jpg?1518205598",
+                        "large": "https://img.scryfall.com/cards/large/en/ori/189b.jpg?1518205598",
+                        "png": "https://img.scryfall.com/cards/png/en/ori/189b.png?1518205598",
+                        "art_crop": "https://img.scryfall.com/cards/art_crop/en/ori/189b.jpg?1518205598",
+                        "border_crop": "https://img.scryfall.com/cards/border_crop/en/ori/189b.jpg?1518205598"
+                    }
+                }
+            ],
+            "legalities": {
+                "standard": "not_legal",
+                "frontier": "legal",
+                "modern": "legal",
+                "pauper": "not_legal",
+                "legacy": "legal",
+                "penny": "not_legal",
+                "vintage": "legal",
+                "duel": "legal",
+                "commander": "legal",
+                "1v1": "legal",
+                "future": "not_legal"
+            },
+            "reserved": false,
+            "reprint": false,
+            "set": "ori",
+            "set_name": "Magic Origins",
+            "set_uri": "https://api.scryfall.com/sets/ori",
+            "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Aori&unique=prints",
+            "scryfall_set_uri": "https://scryfall.com/sets/ori?utm_source=api",
+            "rulings_uri": "https://api.scryfall.com/cards/ori/189/rulings",
+            "prints_search_uri": "https://api.scryfall.com/cards/search?order=set&q=%21%E2%80%9CNissa%2C+Vastwood+Seer+%2F%2F+Nissa%2C+Sage+Animist%E2%80%9D&unique=prints",
+            "collector_number": "189",
+            "digital": false,
+            "rarity": "mythic",
+            "artist": "Wesley Burt",
+            "frame": "2015",
+            "full_art": false,
+            "border_color": "black",
+            "timeshifted": false,
+            "colorshifted": false,
+            "futureshifted": false,
+            "edhrec_rank": 798,
+            "usd": "5.09",
+            "tix": "1.61",
+            "eur": "5.69",
+            "related_uris": {
+                "gatherer": "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=398438",
+                "tcgplayer_decks": "http://decks.tcgplayer.com/magic/deck/search?contains=Nissa%2C+Vastwood+Seer&page=1&partner=Scryfall",
+                "edhrec": "http://edhrec.com/route/?cc=Nissa%2C+Vastwood+Seer",
+                "mtgtop8": "http://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Nissa%2C+Vastwood+Seer"
+            },
+            "purchase_uris": {
+                "amazon": "https://www.amazon.com/gp/search?ie=UTF8&index=toys-and-games&keywords=Nissa%2C+Vastwood+Seer&tag=scryfall-20",
+                "ebay": "http://rover.ebay.com/rover/1/711-53200-19255-0/1?campid=5337966903&icep_catId=19107&icep_ff3=10&icep_sortBy=12&icep_uq=Nissa%2C+Vastwood+Seer&icep_vectorid=229466&ipn=psmain&kw=lg&kwid=902099&mtid=824&pub=5575230669&toolid=10001",
+                "tcgplayer": "http://store.tcgplayer.com/magic/magic-origins/nissa-vastwood-seer?partner=Scryfall",
+                "magiccardmarket": "https://www.cardmarket.com/Magic/Products/Singles/Magic+Origins/Nissa%2C+Vastwood+Seer+%2F%2F+Nissa%2C+Sage+Animist?referrer=scryfall",
+                "cardhoarder": "https://www.cardhoarder.com/cards/58056?affiliate_id=scryfall&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall",
+                "card_kingdom": "https://www.cardkingdom.com/catalog/item/201597?partner=scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+                "mtgo_traders": "https://www.mtgotraders.com/deck/ref.php?id=58056&referral=scryfall",
+                "coolstuffinc": "https://www.coolstuffinc.com/p/Magic%3A+The+Gathering/Nissa%2C+Vastwood+Seer+%2F%2F+Nissa%2C+Sage+Animist?utm_source=scryfall"
+            }
+        };
 //#endregion
 
 describe('normal card', () => {
@@ -219,7 +339,7 @@ describe('normal card', () => {
             assert.equal(chandra.getPrices(), "USD: 1.97 / EUR: 2.74");
         });
         it('should have correct image', () => {
-            assert.equal(chandra.image, "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
+            assert.equal(chandra.getImage(), "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
         });
     });
 });
@@ -243,13 +363,75 @@ describe('split card', () => {
             assert.equal(wearTear.getManaCostAndType(), "{1}{R} Instant // {W} Instant");
         });
         it('should have correct body text', () => {
-            assert.equal(wearTear.getBodyText(),"**Wear** *{1}{R} Instant*\n  \nDestroy target artifact.\n  \nFuse (You may cast one or both halves of this card from your hand.)\n  \n  \n**Tear** *{W} Instant*\n  \nDestroy target enchantment.\n  \nFuse (You may cast one or both halves of this card from your hand.")
+            assert.equal(wearTear.getBodyText(),"**Wear**\n  \nDestroy target artifact.\n  \nFuse (You may cast one or both halves of this card from your hand.)\n  \n  \n**Tear**\n  \nDestroy target enchantment.\n  \nFuse (You may cast one or both halves of this card from your hand.)")
         });
         it('should have correct prices', () => {
             assert.equal(wearTear.getPrices(), "USD: 1.15 / EUR: 1.28");
         });
         it('should have correct image', () => {
-            assert.equal(wearTear.image, "https://img.scryfall.com/cards/large/en/dgm/135a.jpg?1520204292");
+            assert.equal(wearTear.getImage(), "https://img.scryfall.com/cards/large/en/dgm/135a.jpg?1520204292");
+        });
+    });
+});
+
+describe('dual card', () => {
+
+    var nissa = CardFactory.createCard(nissaData);
+
+    describe('nissa, vastwood seer', () => {
+        it('should be a DualCard', () => {
+            assert(nissa instanceof DualCard);
+        });
+        it('should have correct name', () => {
+            assert.equal(nissa.name, "Nissa, Vastwood Seer // Nissa, Sage Animist");
+        });
+        it('should have correct display name', () => {
+            assert.equal(nissa.getDisplayName(), "Nissa, Vastwood Seer");
+        });
+        it('should have correct set', () => {
+            assert.equal(nissa.set, "ORI");
+        });
+        it('should have correct set and rarity', () => {
+            assert.equal(nissa.getSetAndRarity(), "Magic Origins M");
+        });
+        it('should have correct mana cost and type', () => {
+            assert.equal(nissa.getManaCostAndType(), "{2}{G} Legendary Creature — Elf Scout");
+        });
+        it('should have correct body text', () => {
+            assert.equal(nissa.getBodyText(),"When Nissa, Vastwood Seer enters the battlefield, you may search your library for a basic Forest card, reveal it, put it into your hand, then shuffle your library.\n  \nWhenever a land enters the battlefield under your control, if you control seven or more lands, exile Nissa, then return her to the battlefield transformed under her owner's control.")
+        });
+        it('should have correct prices', () => {
+            assert.equal(nissa.getPrices(), "USD: 5.09 / EUR: 5.69");
+        });
+        it('should have correct image', () => {
+            assert.equal(nissa.getImage(), "https://img.scryfall.com/cards/large/en/ori/189a.jpg?1518205598");
+        });
+    });
+
+    var nissa2 = CardFactory.createCard(nissaData);
+    nissa2.flip();
+
+    describe('nissa, sage animist', () => {
+        it('should have correct display name', () => {
+            assert.equal(nissa2.getDisplayName(), "Nissa, Sage Animist");
+        });
+        it('should have correct set', () => {
+            assert.equal(nissa2.set, "ORI");
+        });
+        it('should have correct set and rarity', () => {
+            assert.equal(nissa2.getSetAndRarity(), "Magic Origins M");
+        });
+        it('should have correct mana cost and type', () => {
+            assert.equal(nissa2.getManaCostAndType(), "Legendary Planeswalker — Nissa");
+        });
+        it('should have correct body text', () => {
+            assert.equal(nissa2.getBodyText(),"+1: Reveal the top card of your library. If it's a land card, put it onto the battlefield. Otherwise, put it into your hand.\n  \n−2: Create a legendary 4/4 green Elemental creature token named Ashaya, the Awoken World.\n  \n−7: Untap up to six target lands. They become 6/6 Elemental creatures. They're still lands.")
+        });
+        it('should have correct prices', () => {
+            assert.equal(nissa2.getPrices(), "USD: 5.09 / EUR: 5.69");
+        });
+        it('should have correct image', () => {
+            assert.equal(nissa2.getImage(), "https://img.scryfall.com/cards/large/en/ori/189b.jpg?1518205598");
         });
     });
 });
