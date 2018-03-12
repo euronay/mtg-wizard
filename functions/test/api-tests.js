@@ -47,16 +47,26 @@ describe('search for card', () => {
 });
 
 describe('get reprints', () => {
-    it('should find ori and ima ', () => {
-        Api.searchCards("topan freeblade")
-        .then(cards => {
-            return Api.findPrints(cards[0])
-            .then(reprints => {
-                // TODO - this test will break if another reprint is printed
-                assert.equal(reprints[0].set, "ima");
-                assert.equal(reprints[1].set, "ori");
-            })
-            .catch(error => {});
+    it('should find ori and ima ', async () => {
+        var cards = await Api.searchCards("topan freeblade");
+
+        var reprints = await Api.findPrints(cards[0]);
+        
+        // TODO - this test will break if another reprint is printed
+        assert.equal(reprints[0].set.toLowerCase(), "ima");
+        assert.equal(reprints[1].set.toLowerCase(), "ori");
+            
+    });
+});
+
+describe('get sets', () => {
+    it('should find all sets ', () => {
+        Api.getSets()
+        .then(data => {
+            var ori = sets.filter(function (item) {
+                return item.code == `ori`;
+            });
+            assert.equal(ori.name, 'Magic Origins');
         })
         .catch(error => {});
     });
