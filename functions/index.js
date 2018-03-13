@@ -2,12 +2,43 @@ const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
 var Api = require('./api/api.js');
 var DualCard = require('./card/dualcard.js');
-
+var CommandParser = require('./util/commandparser.js')
 
 exports.scrybot = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
     const screenAvailable = app.hasAvailableSurfaceCapabilities(app.SurfaceCapabilities.SCREEN_OUTPUT);
     
+    class CommandCallback {
+        searchForACard(query) {
+            return `Searching for card: ${query}`;
+        }
+        getCard(cardId) {
+            console.log(`Getting card: ${cardId}`);
+            Api.getCard(cardId).then(card => {
+                app.data.card = card;
+                app.ask(renderCard(card));
+                return;
+            })
+            .catch(error => {
+                console.error(error);
+                app.tell("Sorry, I encountered an error. Please try later.");
+                return;
+            });
+            
+        }
+        findPrints(cardId) {
+            return `Finding reprints: ${cardId}`;
+        }
+        flip(card){
+            return `Flip: ${card.name}`;
+        }
+        askResponse(text) {
+            return `Ask response: ${text}`;
+        }
+        tellResponse(text) {
+            return `Tell response: ${text}`;
+        }
+    }
 
     function getDebugInfo() {
         // you can get some userId - but for getting the name, you would
@@ -111,15 +142,7 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         var cardId = app.getSelectedOption();
         console.log(`Getting card id ${cardId}`);
 
-        Api.getCard(cardId)
-        .then(card => {
-            app.data.card = card;
-            app.ask(renderCard(card));
-        })
-        .catch(error => {
-            console.log(error);
-            app.tell("Sorry an error occurred");
-        });
+        new CommandCallback().getCard(cardId);
 
         console.log(`done optionIntent - ${getDebugInfo()}`);
     }
@@ -157,8 +180,6 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         return listItem;
     }
 
-
-
     // finally: create map and handle request
     // map all intents to specific functions
     let actionMap = new Map();
@@ -174,3 +195,4 @@ exports.scrybot = functions.https.onRequest((request, response) => {
     app.handleRequest(actionMap);
 
 });
+

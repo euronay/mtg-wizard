@@ -5,6 +5,8 @@ module.exports = class CommandParser {
 
     static async parse(commandText, context, callback){
         
+        commandText = commandText.toLowerCase();
+
         console.log(`Parsing command '${commandText}'`)
 
         // FROM <Set>
@@ -24,6 +26,11 @@ module.exports = class CommandParser {
                 return callback.searchForACard(`${cardname} e:${set}`);
             }
         }
+
+        // RANDOM CARD
+        if(commandText === 'random'){
+            return callback.getCard('random');
+        }
         
         // EXIT COMMANDS
         var exitCommands = ['bye', 'goodbye', 'thanks', 'exit', 'no'];
@@ -41,7 +48,7 @@ module.exports = class CommandParser {
 
             // FLIP
             var flipCommands = ['flip', 'transform'];
-            if(context.layout == 'transform' && printCommands.includes(commandText)){ //TODO meld
+            if(context.layout === 'transform' && printCommands.includes(commandText)){ //TODO meld
                 return callback.flip(context);
             }
         }
@@ -59,11 +66,11 @@ module.exports = class CommandParser {
             var sets = await Api.getSets()
             
             // search for exact set code
-            var matchingSets = sets.filter(function (item) {
-                return item.code == search || item.name.toLowerCase() == search;
+            var matchingSets = sets.filter(item => {
+                return item.code === search || item.name.toLowerCase() === search;
             });
 
-            if(matchingSets.length == 1)
+            if(matchingSets.length === 1)
                 return matchingSets[0].code;
 
             return undefined;
