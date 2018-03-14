@@ -3,11 +3,12 @@ var Api = require('../api/api.js');
 module.exports = class CommandParser {
 
 
-    static async parse(commandText, context, callback){
+    static parse(commandText, context, callback){
         
         commandText = commandText.toLowerCase();
 
-        console.log(`Parsing command '${commandText}'`)
+        console.log(`Parsing command '${commandText}'`);
+        console.log(`Card in context '${context.card ? context.card.name : "none"}'`);
 
         // FROM <Set>
         if(commandText.indexOf('from') > 0)
@@ -19,12 +20,20 @@ module.exports = class CommandParser {
             console.log(`Card name '${cardname}'
             Possible Set name '${possibleSetName}'`);
 
-            var set = await getMagicSet(possibleSetName);
-            console.log(`Actual set ${set}`);
+            return getMagicSet(possibleSetName)
+            .then(set => {
+                console.log(`Actual set ${set}`);
+                if(set){
+                    return callback.searchForACard(`${cardname} e:${set}`);
+                }
+                else {
+                    // we couldn't find a set- just search for name
+                    return callback.searchForACard(commandText);
+                }
+            })
+            .catch(error => {throw error;});
 
-            if(set){
-                return callback.searchForACard(`${cardname} e:${set}`);
-            }
+            
         }
 
         // RANDOM CARD
@@ -38,18 +47,18 @@ module.exports = class CommandParser {
             return callback.tellResponse('Thanks for using Scrybot!');
         }
 
-        if(context)
+        if(context.card)
         {
             // REPRINTS
             var printCommands = ['printings', 'reprints', 'sets'];
             if(printCommands.includes(commandText)){
-                return callback.findReprints(context.id);
+                return callback.findPrints(context.card);
             }
 
             // FLIP
             var flipCommands = ['flip', 'transform'];
-            if(context.layout === 'transform' && printCommands.includes(commandText)){ //TODO meld
-                return callback.flip(context);
+            if(context.card.layout === 'transform' && flipCommands.includes(commandText)){ //TODO meld
+                return callback.flip(context.card);
             }
         }
 
@@ -59,21 +68,24 @@ module.exports = class CommandParser {
         // DEFAULT SEARCH
         return callback.searchForACard(commandText);
 
+        // should probably go in api?
+        function getMagicSet(search){
+            return new Promise((resolve, reject) => {
+                // get sets
+                Api.getSets()
+                .then(sets => {
+                    // search for exact set code
+                    var matchingSets = sets.filter(item => {
+                        return item.code === search || item.name.toLowerCase() === search;
+                    });
 
-        async function getMagicSet(search){
+                    if(matchingSets.length === 1)
+                        resolve(matchingSets[0].code);
 
-            // get sets
-            var sets = await Api.getSets()
-            
-            // search for exact set code
-            var matchingSets = sets.filter(item => {
-                return item.code === search || item.name.toLowerCase() === search;
+                    resolve(undefined);
+                })
+                .catch(error => {reject(error);});
             });
-
-            if(matchingSets.length === 1)
-                return matchingSets[0].code;
-
-            return undefined;
         }
     }
 
