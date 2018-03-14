@@ -1,8 +1,7 @@
 const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-var Api = require('./api/api.js');
-var DualCard = require('./card/dualcard.js');
-
+var CommandParser = require('./util/commandparser.js');
+var CommandCallback = require('./util/commandcallback.js');
 
 exports.scrybot = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});
@@ -23,8 +22,7 @@ exports.scrybot = functions.https.onRequest((request, response) => {
        var triggerQuery = app.getArgument("trigger_query");
        if(triggerQuery && triggerQuery.indexOf("find ") === 0)
        {
-           //TODO
-           //findCard(triggerQuery.substring(5));
+           CommandParser.parse(triggerQuery.substring(5), app.data, new CommandCallback(app));
        }
        else
        {
@@ -39,67 +37,7 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         
         var command = app.getRawInput().toLowerCase();
 
-        if((command === "reprints" || command === "prints") && app.data.card){
-            Api.findPrints(app.data.card)
-            .then(reprints => {
-                var list = app.buildList("Results");
-                
-                if(reprints.length === 1){
-                    app.ask(`The only printing of ${app.data.card.name} is in ${app.data.card.set_name}. Find another card?`);
-                }
-                else {
-                    reprints.forEach(card => {
-                        list.addItems(renderListItem(card, true));    
-                    });
-    
-                    app.askWithList(`I found these reprints of ${app.data.card.name}.`, list);
-                    app.data.card = null;
-                }               
-            })
-            .catch(error => {
-                console.log(error);
-                app.tell("Sorry an error occurred");
-            });
-        }
-        else if(command === "flip" && app.data.card.layout === "transform"){
-            var dualCard = new DualCard();
-            Object.assign(dualCard, app.data.card);
-            dualCard.flip();
-            app.data.card = dualCard;
-            app.ask(renderCard(dualCard));
-        }
-        else if(command === "bye" || command === "thanks"){
-            app.tell('Thanks for using Scrybot!');
-        }
-        else
-        {
-            Api.searchCards(command)
-            .then(cards => {
-                if(cards.length === 1){
-                    app.data.card = cards[0];
-                    app.ask(renderCard(cards[0]));
-                }
-                else {
-                    app.data.card = null;
-                    var list = app.buildList("Results");
-                    
-                    cards.forEach(card => {
-                        list.addItems(renderListItem(card));    
-                    });
-
-                    app.askWithList("I found a few cards. Which one are you interested in?", list);
-                }
-            })
-            .catch(error => {
-                if(error.code === 'not_found'){
-                    app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
-                }
-                else{
-                    console.log(error);
-                    app.tell("Sorry an error occurred");
-                }
-            });
-        }
+        CommandParser.parse(command, app.data, new CommandCallback(app));
 
         console.log(`done textIntent - ${getDebugInfo()}`);
     }
@@ -111,53 +49,12 @@ exports.scrybot = functions.https.onRequest((request, response) => {
         var cardId = app.getSelectedOption();
         console.log(`Getting card id ${cardId}`);
 
-        Api.getCard(cardId)
-        .then(card => {
-            app.data.card = card;
-            app.ask(renderCard(card));
-        })
-        .catch(error => {
-            console.log(error);
-            app.tell("Sorry an error occurred");
-        });
+        new CommandCallback(app).getCard(cardId);
 
         console.log(`done optionIntent - ${getDebugInfo()}`);
     }
 
-    function renderCard(card){
-
-        var displayCard = app.buildBasicCard()
-        .setTitle(card.getDisplayName())
-        .setSubtitle(card.getSetAndRarity())
-        .setImageDisplay('WHITE')
-        .addButton("View on Scryfall", card.scryfall_uri)
-        .setBodyText(
-            `**${card.getManaCostAndType()}**\n  \n` + 
-            `${card.getBodyText()}\n  \n` + 
-            `*${card.getPrices()}*`
-        )
-        .setImage(card.getImage(), card.name);
-
-        var response = app.buildRichResponse()
-        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
-        .addBasicCard(displayCard);
-        return response;
-    }
-
-    function renderListItem(card, showSet){
-        var listItem = app.buildOptionItem(card.id,
-        [card.name])
-        .setTitle(card.name)
-        .setDescription(`${card.getSetAndRarity()}  \n  \n${card.getManaCostAndType()}`)
-        .setImage(card.getThumbnail(), card.name);
-
-        if(showSet)
-            listItem.setTitle(`${card.name} (${card.set})`);
-
-        return listItem;
-    }
-
-
+    
 
     // finally: create map and handle request
     // map all intents to specific functions
@@ -174,3 +71,4 @@ exports.scrybot = functions.https.onRequest((request, response) => {
     app.handleRequest(actionMap);
 
 });
+

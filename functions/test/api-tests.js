@@ -2,62 +2,53 @@ var assert = require('assert');
 var Api = require('../api/api.js');
 
 describe('get card by id', () => {
-    it('should return nissa steward of elements', () => {
-        return Api.getCard("c79036a1-2239-4d4f-8b58-6cf9ac4863fc")
-        .then(card => {
-            assert.equal(card.name, 'Nissa, Steward of Elements');
-        })
-        .catch(error => {});
+    it('should return nissa steward of elements', async () => {
+        var card = await Api.getCard("c79036a1-2239-4d4f-8b58-6cf9ac4863fc");
+        assert.equal(card.name, 'Nissa, Steward of Elements');
     });
 
-    it('throw an error', () => {
-        return Api.getCard("sdfsdf")
-        .then(card => {})
-        .catch(error => {
-            assert.equal(error.code, 'not_found');
-        });
+    it('throw an error', async () => {
+        var card = await Api.getCard("sdfsdf").catch(error => {assert.equal(error.code, 'not_found');});
     });
 });
 
 describe('search for card', () => {
-    it('should return topan freeblade', () => {
-        return Api.searchCards("topan freeblade")
-        .then(cards => {
-            assert.equal(cards[0].name, 'Topan Freeblade');
-        })
-        .catch(error => {});
+    it('should return topan freeblade', async () => {
+        var cards = await Api.searchCards("topan freeblade")
+        assert.equal(cards[0].name, 'Topan Freeblade');
     });
 
-    it('should return wear//tear ', () => {
-        return Api.searchCards("wear tear")
-        .then(cards => {
-            assert.equal(cards[0].name, 'Wear // Tear');
-        })
-        .catch(error => {});
+    it('should return wear//tear ', async () => {
+        var cards = await Api.searchCards("wear tear")
+        assert.equal(cards[0].name, 'Wear // Tear');
     });
 
-    it('should find no cards', () => {
-        return Api.searchCards("sdfsdf")
-        .then(cards => {})
-        .catch(error => {
-            assert.equal(error.code, 'not_found');
-        });
+    it('should find no cards', async () => {
+        var cards = await Api.searchCards("sdfsdf").catch(error => {assert.equal(error.code, 'not_found');});
     });
 
 });
 
 describe('get reprints', () => {
-    it('should find ori and ima ', () => {
-        Api.searchCards("topan freeblade")
-        .then(cards => {
-            return Api.findPrints(cards[0])
-            .then(reprints => {
-                // TODO - this test will break if another reprint is printed
-                assert.equal(reprints[0].set, "ima");
-                assert.equal(reprints[1].set, "ori");
-            })
-            .catch(error => {});
-        })
-        .catch(error => {});
+    it('should find ori and ima ', async () => {
+        var cards = await Api.searchCards("topan freeblade");
+
+        var reprints = await Api.findPrints(cards[0]);
+        
+        // TODO - this test will break if another reprint is printed
+        assert.equal(reprints[0].set.toLowerCase(), "ima");
+        assert.equal(reprints[1].set.toLowerCase(), "ori");     
+    });
+});
+
+describe('get sets', () => {
+    it('should find all sets ', async () => {
+        var sets = await Api.getSets();
+
+        var ori = sets.filter(item => {
+            return item.code === `ori`;
+        });
+
+        assert.equal(ori[0].name, 'Magic Origins');
     });
 });

@@ -59,4 +59,24 @@ module.exports = class Api {
         });
     }
 
+    static getSets(){
+        return new Promise((resolve, reject) => {
+            var uri = `https://api.scryfall.com/sets;`
+            console.log(`Calling ${uri}`);
+            request(uri, {timeout: 5000})
+            .then(response => {
+                var data = JSON.parse(response);
+                if(data.data){
+                    resolve(data.data);    
+                } 
+
+            })
+            .catch(error => {
+                if(error.error){
+                    reject(JSON.parse(error.error));
+                }
+            });
+        });
+    }
+
 }
