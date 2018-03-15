@@ -33,6 +33,8 @@ The literal and graphical information presented in this app about Magic: The Gat
 
 Card data and images are provided by [Scryfall](www.scryfall.com). This app is not produced by, endorsed by, supported by or affiliated with Scryfall, LLC.
 
+Icon based on an icon made by Freepik from www.flaticon.com 
+
 [Privacy Policy](PrivacyPolicy.md)
 
 [Terms and Conditions](TermsConditions.md)
