@@ -24,7 +24,7 @@ module.exports = class Renderer {
         var listItem = app.buildOptionItem(card.id,
         [card.name])
         .setTitle(card.name)
-        .setDescription(`${card.getSetAndRarity()}  \n  \n${card.getManaCostAndType()}`)
+        .setDescription(`${card.getSetAndRarity()}  \n${card.getManaCostAndType()}`)
         .setImage(card.getThumbnail(), card.name);
 
         if(showSet)
