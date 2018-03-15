@@ -8,6 +8,7 @@ module.exports = class CardFactory{
         switch(cardData.layout){
             case "normal":
             case "meld": // meh, meld is clsoe enough to a normal card - TODO, command to find corresponding card
+            case "leveler": 
                 console.log(`Returning normal card ${cardData.name} (${cardData.set})`);
                 return new Card(cardData);
             case "split":
@@ -18,7 +19,8 @@ module.exports = class CardFactory{
                 console.log(`Returning transform card ${cardData.name} (${cardData.set})`);
                 return new DualCard(cardData);
             default:
-                throw new Error(`Card type ${cardData.layout} is not supported`);
+                console.log(`ERROR Card type ${cardData.layout} is not supported`);
+                return undefined;
         }
     }
 
