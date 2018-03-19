@@ -10,6 +10,25 @@ module.exports = class CommandParser {
         console.log(`Parsing command '${commandText}'`);
         console.log(`Card in context '${context.card ? context.card.name : "none"}'`);
 
+        // Welcome
+        var welcomeCommands = ['hi', 'hello', 'welcome']
+        if(welcomeCommands.includes(commandText)){
+            if(!context.saidHello){
+                return callback.askResponse("Hi, I'm MTG Wizard! Name a Magic card and I'll try and find it for you");
+                // TODO - returning user shorter greeting
+            } else {
+                // We've already said hello, show the help text
+                commandText = 'help';
+            }
+        }
+
+        // Help
+        var helpCommands = ['help', 'what else', 'what can you do', 'what else can you do', 'what else?', 'what can you do?', 'what else can you do?']
+        if(helpCommands.includes(commandText)){
+            return callback.askResponse("I can find any Magic card ever printed. Just say the name or part of the name of any card and I'll look it up. Here are some suggestions to get you started",
+            ['Jace, the Mind Sculptor', 'Lightning Bolt from M11']);
+        }
+
         // FROM <Set>
         if(commandText.indexOf('from') > 0)
         {
@@ -42,9 +61,9 @@ module.exports = class CommandParser {
         }
         
         // EXIT COMMANDS
-        var exitCommands = ['bye', 'goodbye', 'thanks', 'exit', 'no'];
+        var exitCommands = ['bye', 'goodbye', 'thanks', 'exit', 'no', 'nope', 'no thanks'];
         if(exitCommands.includes(commandText)){
-            return callback.tellResponse('Thanks for using Scrybot!');
+            return callback.tellResponse('Thanks for using MTG Wizard!');
         }
 
         if(context.card)

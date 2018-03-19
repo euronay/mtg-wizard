@@ -327,7 +327,7 @@ describe('normal card', () => {
             assert.equal(chandra.set, "OGW");
         });
         it('should have correct set and rarity', () => {
-            assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch M");
+            assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch - Mythic");
         });
         it('should have correct mana cost and type', () => {
             assert.equal(chandra.getManaCostAndType(), "{4}{R}{R}  Legendary Planeswalker — Chandra");
@@ -357,7 +357,7 @@ describe('split card', () => {
             assert.equal(wearTear.set, "DGM");
         });
         it('should have correct set and rarity', () => {
-            assert.equal(wearTear.getSetAndRarity(), "Dragon's Maze U");
+            assert.equal(wearTear.getSetAndRarity(), "Dragon's Maze - Uncommon");
         });
         it('should have correct mana cost and type', () => {
             assert.equal(wearTear.getManaCostAndType(), "{1}{R} Instant // {W} Instant");
@@ -392,7 +392,7 @@ describe('dual card', () => {
             assert.equal(nissa.set, "ORI");
         });
         it('should have correct set and rarity', () => {
-            assert.equal(nissa.getSetAndRarity(), "Magic Origins M");
+            assert.equal(nissa.getSetAndRarity(), "Magic Origins - Mythic");
         });
         it('should have correct mana cost and type', () => {
             assert.equal(nissa.getManaCostAndType(), "{2}{G} Legendary Creature — Elf Scout");
@@ -419,7 +419,7 @@ describe('dual card', () => {
             assert.equal(nissa2.set, "ORI");
         });
         it('should have correct set and rarity', () => {
-            assert.equal(nissa2.getSetAndRarity(), "Magic Origins M");
+            assert.equal(nissa2.getSetAndRarity(), "Magic Origins - Mythic");
         });
         it('should have correct mana cost and type', () => {
             assert.equal(nissa2.getManaCostAndType(), "Legendary Planeswalker — Nissa");

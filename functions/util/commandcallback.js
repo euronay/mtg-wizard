@@ -69,7 +69,7 @@ module.exports = class CommandCallback {
                     list.addItems(Renderer.renderListItem(this.app, card, true));    
                 });
 
-                this.app.askWithList(`I found these reprints of ${this.app.data.card.name}.`, list);
+                this.app.askWithList(`I found these reprints of ${this.app.data.card.name}. Which one are you interested in?`, list);
                 this.app.data.card = null;
             }               
         })
@@ -89,9 +89,19 @@ module.exports = class CommandCallback {
         this.app.ask(Renderer.renderCard(this.app, dualCard));
     }
 
-    askResponse(text) {
+    askResponse(text, suggestions) {
         console.log(`Ask response: ${text}`);
-        this.app.ask(text);
+        if (suggestions) {
+            console.log(`With suggestions: ${suggestions}`);
+
+            let talk = this.app.buildRichResponse()
+            .addSimpleResponse(text)
+            .addSuggestions(suggestions);
+
+            this.app.ask(talk);
+        } else{
+            this.app.ask(text);
+        }
     }
 
     tellResponse(text) {

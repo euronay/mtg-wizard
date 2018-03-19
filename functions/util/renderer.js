@@ -15,7 +15,7 @@ module.exports = class Renderer {
         .setImage(card.getImage(), card.name);
 
         var response = app.buildRichResponse()
-        .addSimpleResponse(`Found ${card.name} from ${card.set_name}`)
+        .addSimpleResponse(`I found ${card.name} from ${card.set_name}. Can I help with anything else?`)
         .addBasicCard(displayCard);
         return response;
     }

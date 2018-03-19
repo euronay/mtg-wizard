@@ -4,14 +4,16 @@
       "description": "Default Welcome Intent",
       "name": "MAIN",
       "fulfillment": {
-        "conversationName": "scrybot"
+        "conversationName": "mtg-wizard"
       },
       "intent": {
         "name": "actions.intent.MAIN",
         "trigger": {
           "queryPatterns": [
-            "talk to Scrybot",
-            "ask Scrybot to find $card"
+            "talk to MTG Wizard",
+            "ask MTG Wizard to find $card",
+            "Find MTG card $card",
+            "Find Magic Card $card"
           ]
         }
       }
@@ -20,7 +22,7 @@
       "description": "Options Intent",
       "name": "OPTION",
       "fulfillment": {
-        "conversationName": "scrybot"
+        "conversationName": "mtg-wizard"
       },
       "intent": {
         "name": "actions.intent.OPTION"
@@ -30,7 +32,7 @@
       "description": "Talk Intent",
       "name": "TEXT",
       "fulfillment": {
-        "conversationName": "scrybot"
+        "conversationName": "mtg-wizard"
       },
       "intent": {
         "name": "actions.intent.TEXT"
@@ -38,8 +40,8 @@
     }
   ],
   "conversations": {
-    "mtg-friend": {
-      "name": "scrybot",
+    "mtg-wizard": {
+      "name": "mtg-wizard",
       "url": "https://us-central1-scrybot-mtg.cloudfunctions.net/scrybot"
     }
   },

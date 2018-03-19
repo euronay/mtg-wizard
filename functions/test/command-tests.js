@@ -68,7 +68,7 @@ describe('generic commands', () => {
     it('should exit if told bye', async () => {
         var result = await CommandParser.parse('bye', new Object(), new TestCommandCallback());
 
-        assert.equal(result, `Tell response: Thanks for using Scrybot!`);
+        assert.equal(result, `Tell response: Thanks for using MTG Wizard!`);
     });
 
    

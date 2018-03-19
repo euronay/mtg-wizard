@@ -22,11 +22,12 @@ exports.scrybot = functions.https.onRequest((request, response) => {
        var triggerQuery = app.getArgument("trigger_query");
        if(triggerQuery && triggerQuery.indexOf("find ") === 0)
        {
-           CommandParser.parse(triggerQuery.substring(5), app.data, new CommandCallback(app));
+            CommandParser.parse(triggerQuery.substring(5), app.data, new CommandCallback(app));
        }
        else
        {
-           app.ask("Hi! Name a card and I'll try and find it.");
+            CommandParser.parse('welcome', app.data, new CommandCallback(app));
+            app.data.saidHello = true;
        }
 
        console.log(`done mainIntent - ${getDebugInfo()}`);

@@ -13,7 +13,7 @@ module.exports = class SplitCard extends Card {
             this.set = cardData.set.toUpperCase();
             this.set_name = cardData.set_name;
             this.layout = cardData.layout;
-            this.rarity = cardData.rarity.substring(0, 1).toUpperCase();
+            this.rarity = cardData.rarity.substring(0, 1).toUpperCase() + cardData.rarity.substring(1);
 
             this.face1 = {
                 "name" : cardData.card_faces[0].name,

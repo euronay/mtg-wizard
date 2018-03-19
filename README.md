@@ -1,9 +1,9 @@
-# Scrybot #
-Search for Magic: The Gathering™ cards from within Google Assistant.
+# Scrybot MTG #
+Search for Magic: The Gathering™ cards from within Google Assistant. This is the engine for the *MTG Wizard* assistant.
 
 
 ## Usage ##
-Open Google Assistant and say ```Talk to Scrybot```
+Open Google Assistant and say ```Talk to MTG Wizard```
 
 To search for cards simply say a card name; part of a card name; or to look for a specific card add *from set*. Examples:
 
@@ -16,7 +16,7 @@ If multiple cards are found, you will be presented with a list of choices. Click
 
 Say ```Random``` for a random card!
 
-Just keep saying the name of cards, and Scrybot will try and find them.
+Just keep saying the name of cards, and MTG Wizard will try and find them.
 
 ### Options ###
 
