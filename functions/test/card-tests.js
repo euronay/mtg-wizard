@@ -4,6 +4,97 @@ var SplitCard = require('../card/splitcard.js');
 var DualCard = require('../card/dualcard.js');
 
 //#region test data
+    var scavengingOozeData = {
+        "object": "card",
+        "id": "614d466e-f830-4a2f-8740-b416a15c67dd",
+        "oracle_id": "1ff25f67-36a7-4cfa-a2b1-2135b5b6fb67",
+        "multiverse_ids": [
+            425959
+        ],
+        "mtgo_id": 63271,
+        "mtgo_foil_id": 63272,
+        "name": "Scavenging Ooze",
+        "uri": "https://api.scryfall.com/cards/mm3/134",
+        "scryfall_uri": "https://scryfall.com/card/mm3/134?utm_source=api",
+        "layout": "normal",
+        "highres_image": true,
+        "image_uris": {
+            "small": "https://img.scryfall.com/cards/small/en/mm3/134.jpg?1517813031",
+            "normal": "https://img.scryfall.com/cards/normal/en/mm3/134.jpg?1517813031",
+            "large": "https://img.scryfall.com/cards/large/en/mm3/134.jpg?1517813031",
+            "png": "https://img.scryfall.com/cards/png/en/mm3/134.png?1517813031",
+            "art_crop": "https://img.scryfall.com/cards/art_crop/en/mm3/134.jpg?1517813031",
+            "border_crop": "https://img.scryfall.com/cards/border_crop/en/mm3/134.jpg?1517813031"
+        },
+        "cmc": 2,
+        "type_line": "Creature — Ooze",
+        "oracle_text": "{G}: Exile target card from a graveyard. If it was a creature card, put a +1/+1 counter on Scavenging Ooze and you gain 1 life.",
+        "mana_cost": "{1}{G}",
+        "power": "2",
+        "toughness": "2",
+        "colors": [
+            "G"
+        ],
+        "color_identity": [
+            "G"
+        ],
+        "legalities": {
+            "standard": "not_legal",
+            "future": "not_legal",
+            "frontier": "not_legal",
+            "modern": "legal",
+            "legacy": "legal",
+            "pauper": "not_legal",
+            "vintage": "legal",
+            "penny": "not_legal",
+            "commander": "legal",
+            "1v1": "legal",
+            "duel": "legal",
+            "brawl": "not_legal"
+        },
+        "reserved": false,
+        "reprint": true,
+        "set": "mm3",
+        "set_name": "Modern Masters 2017",
+        "set_uri": "https://api.scryfall.com/sets/mm3",
+        "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Amm3&unique=prints",
+        "scryfall_set_uri": "https://scryfall.com/sets/mm3?utm_source=api",
+        "rulings_uri": "https://api.scryfall.com/cards/mm3/134/rulings",
+        "prints_search_uri": "https://api.scryfall.com/cards/search?order=set&q=%21%E2%80%9CScavenging+Ooze%E2%80%9D&unique=prints",
+        "collector_number": "134",
+        "digital": false,
+        "rarity": "rare",
+        "flavor_text": "In nature, not a single bone or scrap of flesh goes to waste.",
+        "illustration_id": "41b9c15f-47c8-49f6-9c93-7092da0ab89b",
+        "artist": "Austin Hsu",
+        "frame": "2015",
+        "full_art": false,
+        "border_color": "black",
+        "timeshifted": false,
+        "colorshifted": false,
+        "futureshifted": false,
+        "edhrec_rank": 400,
+        "usd": "2.92",
+        "tix": "9.04",
+        "eur": "2.76",
+        "related_uris": {
+            "gatherer": "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=425959",
+            "tcgplayer_decks": "http://decks.tcgplayer.com/magic/deck/search?contains=Scavenging+Ooze&page=1&partner=Scryfall",
+            "edhrec": "http://edhrec.com/route/?cc=Scavenging+Ooze",
+            "mtgtop8": "http://mtgtop8.com/search?MD_check=1&SB_check=1&cards=Scavenging+Ooze"
+        },
+        "purchase_uris": {
+            "amazon": "https://www.amazon.com/gp/search?ie=UTF8&index=toys-and-games&keywords=Scavenging+Ooze&tag=scryfall-20",
+            "ebay": "http://rover.ebay.com/rover/1/711-53200-19255-0/1?campid=5337966903&icep_catId=19107&icep_ff3=10&icep_sortBy=12&icep_uq=Scavenging+Ooze&icep_vectorid=229466&ipn=psmain&kw=lg&kwid=902099&mtid=824&pub=5575230669&toolid=10001",
+            "tcgplayer": "https://scryfall.com/s/tcgplayer/128655",
+            "magiccardmarket": "https://scryfall.com/s/mcm/295875",
+            "cardhoarder": "https://www.cardhoarder.com/cards/63271?affiliate_id=scryfall&ref=card-profile&utm_campaign=affiliate&utm_medium=card&utm_source=scryfall",
+            "card_kingdom": "https://www.cardkingdom.com/catalog/item/211077?partner=scryfall&utm_campaign=affiliate&utm_medium=scryfall&utm_source=scryfall",
+            "mtgo_traders": "http://www.mtgotraders.com/deck/ref.php?id=63271&referral=scryfall",
+            "coolstuffinc": "https://scryfall.com/s/coolstuffinc/3841737"
+        }
+    };
+
     var chandraData = {
         "object": "card",
         "id": "49fdd0d3-7140-4c12-a41c-37eedd986d9e",
@@ -330,7 +421,7 @@ describe('normal card', () => {
             assert.equal(chandra.getSetAndRarity(), "Oath of the Gatewatch - Mythic");
         });
         it('should have correct mana cost and type', () => {
-            assert.equal(chandra.getManaCostAndType(), "{4}{R}{R}  Legendary Planeswalker — Chandra");
+            assert.equal(chandra.getManaCostAndType(), "{4}{R}{R} Legendary Planeswalker — Chandra 4");
         });
         it('should have correct body text', () => {
             assert.equal(chandra.getBodyText(),"+1: Create two 3/1 red Elemental creature tokens with haste. Exile them at the beginning of the next end step.\n  \n0: Discard all the cards in your hand, then draw that many cards plus one.\n  \n−X: Chandra, Flamecaller deals X damage to each creature.");
@@ -340,6 +431,31 @@ describe('normal card', () => {
         });
         it('should have correct image', () => {
             assert.equal(chandra.getImage(), "https://img.scryfall.com/cards/large/en/ogw/104.jpg?1517813031");
+        });
+    });
+
+    describe('scavageng ooze', () => {
+        var scavengingOoze = CardFactory.createCard(scavengingOozeData);
+        it('should have correct name', () => {
+            assert.equal(scavengingOoze.name, "Scavenging Ooze");
+        });
+        it('should have correct set', () => {
+            assert.equal(scavengingOoze.set, "MM3");
+        });
+        it('should have correct set and rarity', () => {
+            assert.equal(scavengingOoze.getSetAndRarity(), "Modern Masters 2017 - Rare");
+        });
+        it('should have correct mana cost and type', () => {
+            assert.equal(scavengingOoze.getManaCostAndType(), "{1}{G} Creature — Ooze 2/2");
+        });
+        it('should have correct body text', () => {
+            assert.equal(scavengingOoze.getBodyText(),"{G}: Exile target card from a graveyard. If it was a creature card, put a +1/+1 counter on Scavenging Ooze and you gain 1 life.");
+        });
+        it('should have correct prices', () => {
+            assert.equal(scavengingOoze.getPrices(), "USD: 2.92 / EUR: 2.76");
+        });
+        it('should have correct image', () => {
+            assert.equal(scavengingOoze.getImage(), "https://img.scryfall.com/cards/large/en/mm3/134.jpg?1517813031");
         });
     });
 });
@@ -395,7 +511,7 @@ describe('dual card', () => {
             assert.equal(nissa.getSetAndRarity(), "Magic Origins - Mythic");
         });
         it('should have correct mana cost and type', () => {
-            assert.equal(nissa.getManaCostAndType(), "{2}{G} Legendary Creature — Elf Scout");
+            assert.equal(nissa.getManaCostAndType(), "{2}{G} Legendary Creature — Elf Scout 2/2");
         });
         it('should have correct body text', () => {
             assert.equal(nissa.getBodyText(),"When Nissa, Vastwood Seer enters the battlefield, you may search your library for a basic Forest card, reveal it, put it into your hand, then shuffle your library.\n  \nWhenever a land enters the battlefield under your control, if you control seven or more lands, exile Nissa, then return her to the battlefield transformed under her owner's control.")
@@ -422,7 +538,7 @@ describe('dual card', () => {
             assert.equal(nissa2.getSetAndRarity(), "Magic Origins - Mythic");
         });
         it('should have correct mana cost and type', () => {
-            assert.equal(nissa2.getManaCostAndType(), "Legendary Planeswalker — Nissa");
+            assert.equal(nissa2.getManaCostAndType(), "Legendary Planeswalker — Nissa 3");
         });
         it('should have correct body text', () => {
             assert.equal(nissa2.getBodyText(),"+1: Reveal the top card of your library. If it's a land card, put it onto the battlefield. Otherwise, put it into your hand.\n  \n−2: Create a legendary 4/4 green Elemental creature token named Ashaya, the Awoken World.\n  \n−7: Untap up to six target lands. They become 6/6 Elemental creatures. They're still lands.")

@@ -22,6 +22,9 @@ module.exports = class Card {
             this.reprint = cardData.reprint;
             this.prints_uri = cardData.prints_search_uri;
             this.scryfall_uri = cardData.scryfall_uri;
+            this.power = cardData.power || null;
+            this.toughness = cardData.toughness || null;
+            this.loyalty = cardData.loyalty || null;
         }
         catch(ex){
             console.error(ex);
@@ -33,10 +36,22 @@ module.exports = class Card {
     }
 
     getManaCostAndType(){
-        if (this.mana_cost)
-            return `${this.mana_cost}  ${this.type_line}`;
-        else
-            return this.type_line;
+        var output = '';
+
+        if (this.mana_cost){
+            output += `${this.mana_cost} `
+        }
+
+        output += this.type_line;
+
+        if(this.loyalty){
+            output += ` ${this.loyalty}`
+        } 
+        else if(this.power){
+            output += ` ${this.power}/${this.toughness}`
+        }
+
+        return output;
     }
 
     getBodyText(){
