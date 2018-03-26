@@ -22,7 +22,10 @@ module.exports = class DualCard extends Card {
                 "type_line" :cardData.card_faces[0].type_line,
                 "oracle_text" :cardData.card_faces[0].oracle_text,
                 "image" :cardData.card_faces[0].image_uris.large,
-                "thumbnail" :cardData.card_faces[0].image_uris.small
+                "thumbnail" :cardData.card_faces[0].image_uris.small,
+                "loyalty": cardData.card_faces[0].loyalty || null,
+                "power": cardData.card_faces[0].power || null,
+                "toughness": cardData.card_faces[0].toughness || null
             }
 
             this.face2 = {
@@ -32,7 +35,10 @@ module.exports = class DualCard extends Card {
                 "type_line" :cardData.card_faces[1].type_line,
                 "oracle_text" :cardData.card_faces[1].oracle_text,
                 "image" :cardData.card_faces[1].image_uris.large,
-                "thumbnail" :cardData.card_faces[1].image_uris.small
+                "thumbnail" :cardData.card_faces[1].image_uris.small,
+                "loyalty": cardData.card_faces[1].loyalty || null,
+                "power": cardData.card_faces[1].power || null,
+                "toughness": cardData.card_faces[1].toughness || null
             }
 
             this.currentFace = this.face1;
@@ -66,10 +72,22 @@ module.exports = class DualCard extends Card {
     }
 
     getManaCostAndType(){
-        if (this.currentFace.mana_cost)
-            return `${this.currentFace.mana_cost} ${this.currentFace.type_line}`;
-        else
-            return this.currentFace.type_line;
+        var output = '';
+
+        if (this.currentFace.mana_cost){
+            output += `${this.currentFace.mana_cost} `
+        }
+
+        output += this.currentFace.type_line;
+
+        if(this.currentFace.loyalty){
+            output += ` ${this.currentFace.loyalty}`
+        } 
+        else if(this.currentFace.power){
+            output += ` ${this.currentFace.power}/${this.currentFace.toughness}`
+        }
+
+        return output;
     }
 
     getImage(){
