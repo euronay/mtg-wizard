@@ -27,6 +27,26 @@ Once you have found a card, you can say a phrase including one of the following 
 | 'printings', 'reprints', 'sets' | Search for all sets where the selected card was reprinted |
 | 'flip', 'transform' | If the card is a Double faced or meld card, view the other side |
 
+### Deployment ###
+
+Note this is for my reference - if you are forking this repo, you need to set up your own project on [Google Actions](https://console.actions.google.com)
+
+For prod:
+```
+firebase use default
+firebase deploy
+
+gactions update --action_package .\action.json --project scrybot-mtg
+```
+
+For test:
+```
+firebase use test
+firebase deploy
+
+gactions update --action_package .\action-test.json --project scrybot-test
+```
+
 ### Legal Stuff ###
 
 The literal and graphical information presented in this app about Magic: The Gathering, including card images, the mana symbols, and Oracle text, is copyright Wizards of the Coast, LLC, a subsidiary of Hasbro, Inc. This app is not produced by, endorsed by, supported by, or affiliated with Wizards of the Coast.

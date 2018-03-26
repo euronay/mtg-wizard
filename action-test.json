@@ -1,0 +1,46 @@
+{
+  "actions": [
+    {
+      "description": "Default Welcome Intent",
+      "name": "MAIN",
+      "fulfillment": {
+        "conversationName": "scrybot-test"
+      },
+      "intent": {
+        "name": "actions.intent.MAIN",
+        "trigger": {
+          "queryPatterns": [
+            "talk to Scrybot Test"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Options Intent",
+      "name": "OPTION",
+      "fulfillment": {
+        "conversationName": "scrybot-test"
+      },
+      "intent": {
+        "name": "actions.intent.OPTION"
+      }
+    },
+    {
+      "description": "Talk Intent",
+      "name": "TEXT",
+      "fulfillment": {
+        "conversationName": "scrybot-test"
+      },
+      "intent": {
+        "name": "actions.intent.TEXT"
+      }
+    }
+  ],
+  "conversations": {
+    "scrybot-test": {
+      "name": "scrybot-test",
+      "url": "https://us-central1-scrybot-test.cloudfunctions.net/scrybot"
+    }
+  },
+  "locale": "en"
+}

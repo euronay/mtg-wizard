@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "scrybot-mtg"
+    "default": "scrybot-mtg",
+    "test": "scrybot-test"
   }
 }
