@@ -3,7 +3,7 @@ var Api = require('../api/api.js');
 module.exports = class CommandParser {
 
 
-    static parse(commandText, context, callback){
+    static async parse(commandText, context, callback){
         
         commandText = commandText.toLowerCase();
 
@@ -39,20 +39,12 @@ module.exports = class CommandParser {
             console.log(`Card name '${cardname}'
             Possible Set name '${possibleSetName}'`);
 
-            return getMagicSet(possibleSetName)
-            .then(set => {
-                console.log(`Actual set ${set}`);
-                if(set){
-                    return callback.searchForACard(`${cardname} e:${set}`);
-                }
-                else {
-                    // we couldn't find a set- just search for name
-                    return callback.searchForACard(commandText);
-                }
-            })
-            .catch(error => {throw error;});
+            var set = await getMagicSet(possibleSetName);
+            console.log(`Actual set ${set}`);
 
-            
+            if(set){
+                return callback.searchForACard(`${cardname} e:${set}`);
+            }
         }
 
         // RANDOM CARD
@@ -71,7 +63,7 @@ module.exports = class CommandParser {
             // REPRINTS
             var printCommands = ['printings', 'reprints', 'sets'];
             if(printCommands.includes(commandText)){
-                return callback.findPrints(context.card);
+                return callback.findReprints(context.card);
             }
 
             // FLIP
@@ -88,23 +80,20 @@ module.exports = class CommandParser {
         return callback.searchForACard(commandText);
 
         // should probably go in api?
-        function getMagicSet(search){
-            return new Promise((resolve, reject) => {
-                // get sets
-                Api.getSets()
-                .then(sets => {
-                    // search for exact set code
-                    var matchingSets = sets.filter(item => {
-                        return item.code === search || item.name.toLowerCase() === search;
-                    });
+        async function getMagicSet(search){
 
-                    if(matchingSets.length === 1)
-                        resolve(matchingSets[0].code);
-
-                    resolve(undefined);
-                })
-                .catch(error => {reject(error);});
+            // get sets
+            var sets = await Api.getSets()
+            
+            // search for exact set code
+            var matchingSets = sets.filter(item => {
+                return item.code === search || item.name.toLowerCase() === search;
             });
+
+            if(matchingSets.length === 1)
+                return matchingSets[0].code;
+
+            return undefined;
         }
     }
 

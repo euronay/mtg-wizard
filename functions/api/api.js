@@ -3,80 +3,35 @@ var request = require('request-promise');
 
 module.exports = class Api {
 
-     static searchCards(query){
-        return new Promise((resolve, reject) => {
-            //TODO properly escape string
-            var uri = 'https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20');
-            console.log(`Calling ${uri}`);
-            request(uri, {timeout: 5000})
-            .then(response => {
-                var data = JSON.parse(response);
-                resolve(data.data.map(element => CardFactory.createCard(element)));     
-            })
-            .catch(error => {
-                if(error.error){
-                    reject(JSON.parse(error.error));
-                }
-            });
-        });
+     static async searchCards(query){
+        //TODO properly escape string
+        var uri = 'https://api.scryfall.com/cards/search?q=' + query.replace(' ', '%20');
+        var data = await this.callUri(uri).catch(error => {throw error;});
+        return data.data.map(element => CardFactory.createCard(element));     
     }
 
-    static getCard(cardId){
-        return new Promise((resolve, reject) => {
-            var uri = 'https://api.scryfall.com/cards/' + cardId;
-            console.log(`Calling ${uri}`);
-            request(uri, {timeout: 5000})
-            .then(response => {
-                var data = JSON.parse(response);
-                if(data){
-                    resolve(CardFactory.createCard(data));     
-                }
-            })
-            .catch(error => {
-                if(error.error){ // TODO For some reason error.error returns undefined and then the error
-                    reject(JSON.parse(error.error));
-                }
-            });
-        });
+    static async getCard(cardId){
+        var uri = 'https://api.scryfall.com/cards/' + cardId
+        var data = await this.callUri(uri).catch(error => {throw error;});
+        return CardFactory.createCard(data); 
     }
 
-    static findPrints(card){
-        return new Promise((resolve, reject) => {
-            console.log(`Calling ${card.prints_uri}`);
-            request(card.prints_uri, {timeout: 5000})
-            .then(response => {
-                var data = JSON.parse(response);
-                if(data.data){
-                    resolve(data.data.map(element => CardFactory.createCard(element)));    
-                } 
-                
-            })
-            .catch(error => {
-                if(error.error){
-                    reject(JSON.parse(error.error));
-                }
-            });
-        });
+    static async findPrints(card){
+        var data = await this.callUri(card.prints_uri).catch(error => {throw error;});
+        return data.data.map(element => CardFactory.createCard(element));     
     }
 
-    static getSets(){
-        return new Promise((resolve, reject) => {
-            var uri = `https://api.scryfall.com/sets;`
-            console.log(`Calling ${uri}`);
-            request(uri, {timeout: 5000})
-            .then(response => {
-                var data = JSON.parse(response);
-                if(data.data){
-                    resolve(data.data);    
-                } 
+    static async getSets(){
+        var data = await this.callUri(`https://api.scryfall.com/sets`).catch(error => {throw error;});
+        return data.data;
+    }
 
-            })
-            .catch(error => {
-                if(error.error){
-                    reject(JSON.parse(error.error));
-                }
-            });
-        });
+    static async callUri(uri){
+        console.log(`Calling ${uri}`);
+        var response = await request(uri, {timeout: 5000}).catch(error => {throw JSON.parse(error.error)});
+        var data = JSON.parse(response);
+        return data;  
+        
     }
 
 }

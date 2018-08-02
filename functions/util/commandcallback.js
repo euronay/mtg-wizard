@@ -8,11 +8,12 @@ module.exports = class CommandCallback {
         this.app = app;
     }
 
-    searchForACard(query) {
+    async searchForACard(query) {
         console.log(`Searching for card: ${query}`);
 
-        Api.searchCards(query)
-        .then(cards => {
+        try{
+            var cards = await Api.searchCards(query)
+
             if(cards.length === 1){
                 this.app.data.card = cards[0];
                 this.app.ask(Renderer.renderCard(this.app, cards[0]));
@@ -27,8 +28,8 @@ module.exports = class CommandCallback {
 
                 this.app.askWithList("I found a few cards. Which one are you interested in?", list);
             }
-        })
-        .catch(error => {
+        }
+        catch(error) {
             if(error.code === 'not_found'){
                 this.app.ask("Sorry, I couldn't find any cards that match that name. Find another?");
             }
@@ -36,29 +37,31 @@ module.exports = class CommandCallback {
                 console.log(error);
                 this.app.tell("Sorry an error occurred");
             }
-        });
+        }
 
     }
 
-    getCard(cardId) {
+    async getCard(cardId) {
         console.log(`Getting card: ${cardId}`);
-        Api.getCard(cardId).then(card => {
+        try {
+            var card = await Api.getCard(cardId);
             this.app.data.card = card;
             this.app.ask(Renderer.renderCard(this.app, card));
             return;
-        })
-        .catch(error => {
+        }
+        catch(error){
             console.error(error);
             this.app.tell("Sorry, I encountered an error. Please try later.");
             return;
-        });
+        }
     }
 
-    findPrints(card) {
+    async findReprints(card) {
         console.log(`Finding reprints: ${card.name}`);
 
-        Api.findPrints(this.app.data.card)
-        .then(reprints => {
+        try{
+            var reprints = await Api.findPrints(this.app.data.card);
+
             var list = this.app.buildList("Results");
             
             if(reprints.length === 1){
@@ -72,11 +75,11 @@ module.exports = class CommandCallback {
                 this.app.askWithList(`I found these reprints of ${this.app.data.card.name}. Which one are you interested in?`, list);
                 this.app.data.card = null;
             }               
-        })
-        .catch(error => {
+        }
+        catch(error){
             console.log(error);
             this.app.tell("Sorry an error occurred");
-        });
+        }
     }
 
     flip(card){
