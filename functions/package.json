@@ -23,5 +23,8 @@
     "eslint-plugin-promise": "^3.6.0",
     "mocha": "^5.0.1"
   },
+  "engines": {
+    "node": "8"
+  },
   "private": true
 }
