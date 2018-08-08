@@ -8,12 +8,16 @@
       },
       "intent": {
         "name": "actions.intent.MAIN",
+        "parameters": [{
+          "name" : "card",
+          "type" : "org.schema.type.Text"
+        }],
         "trigger": {
           "queryPatterns": [
             "talk to MTG Wizard",
-            "ask MTG Wizard to find $card",
-            "Find MTG card $card",
-            "Find Magic Card $card"
+            "ask MTG Wizard to find $org.schema.type.Text:card",
+            "Find MTG card $org.schema.type.Text:card",
+            "Find Magic Card $org.schema.type.Text:card"
           ]
         }
       }
