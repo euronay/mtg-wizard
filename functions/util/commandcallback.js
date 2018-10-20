@@ -22,11 +22,24 @@ module.exports = class CommandCallback {
                 this.app.data.card = null;
                 var list = this.app.buildList("Results");
                 
+                var cardsCount = 0;
+                var cardsToSpeak = "\n";
+
                 cards.forEach(card => {
-                    list.addItems(Renderer.renderListItem(this.app, card));    
+                    cardsCount ++;
+                    list.addItems(Renderer.renderListItem(this.app, card));  
+                    cardsToSpeak += `${card.name} from ${card.set_name},\n`;  
                 });
 
-                this.app.askWithList("I found a few cards. Which one are you interested in?", list);
+                if(cardsCount <= 5){
+                    this.app.askWithList({speech: `I found ${cardsToSpeak}. Which one are you interested in?`,
+                        displayText: "Which card are you interested in?"
+                    }, list);
+                } else {
+                    this.app.askWithList({speech: `I found ${cardsCount} cards. Which card are you interested in?`,
+                        displayText: `I found ${cardsCount} cards. Which card are you interested in?`
+                    }, list);
+                }
             }
         }
         catch(error) {

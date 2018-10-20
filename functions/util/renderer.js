@@ -1,3 +1,5 @@
+var Speaker = require('./speaker.js');
+
 module.exports = class Renderer {
 
     static renderCard(app, card){
@@ -15,7 +17,8 @@ module.exports = class Renderer {
         .setImage(card.getImage(), card.name);
 
         var response = app.buildRichResponse()
-        .addSimpleResponse(`I found ${card.name} from ${card.set_name}. Can I help with anything else?`)
+        .addSimpleResponse({speech: `I found ${card.name} from ${card.set_name}. ${Speaker.speak(card)}. Can I help with anything else?`,
+            displayText: `I found ${card.name} from ${card.set_name}. Can I help with anything else?`})
         .addBasicCard(displayCard);
         return response;
     }
