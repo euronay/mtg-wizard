@@ -1,3 +1,5 @@
+![img](https://github.com/richardbmx/scrybot-mtg/blob/master/Logotype.png?raw=true)
+
 # Scrybot MTG #
 Search for Magic: The Gathering™ cards from within Google Assistant. This is the engine for the *MTG Wizard* assistant.
 
