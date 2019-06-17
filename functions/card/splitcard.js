@@ -29,8 +29,10 @@ module.exports = class SplitCard extends Card {
                 "oracle_text" :cardData.card_faces[1].oracle_text
             }
 
-            this.usd = cardData.usd;
-            this.eur = cardData.eur;
+            this.usd = cardData.prices.usd;
+            this.usd_foil = cardData.prices.usd_foil;
+            this.eur = cardData.prices.eur;
+            
             this.image = cardData.image_uris.large;
             this.thumbnail = cardData.image_uris.small;
             this.reprint = cardData.reprint;

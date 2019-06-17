@@ -29,12 +29,6 @@ describe('search for card', () => {
 
 });
 
-describe('big search', () =>{
-    it('should return in decent time', async () => {
-        var cards = await Api.searchCards("dragon");
-    });
-});
-
 describe('get reprints', () => {
     it('should find ori and ima ', async () => {
         var cards = await Api.searchCards("topan freeblade");

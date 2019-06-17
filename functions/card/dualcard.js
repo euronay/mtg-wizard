@@ -43,8 +43,9 @@ module.exports = class DualCard extends Card {
 
             this.currentFace = this.face1;
 
-            this.usd = cardData.usd;
-            this.eur = cardData.eur;
+            this.usd = cardData.prices.usd;
+            this.usd_foil = cardData.prices.usd_foil;
+            this.eur = cardData.prices.eur;
             
             this.reprint = cardData.reprint;
             this.prints_uri = cardData.prints_search_uri;
