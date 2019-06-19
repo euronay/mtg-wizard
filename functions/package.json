@@ -14,6 +14,7 @@
     "actions-on-google": "^1.11.0",
     "firebase-admin": "^5.13.1",
     "firebase-functions": "^3.0.1",
+    "mtg-wizard-core": "^0.2.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },

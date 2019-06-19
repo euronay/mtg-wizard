@@ -1,4 +1,4 @@
-var Api = require('../api/api.js');
+const Api = require('mtg-wizard-core');
 
 module.exports = class CommandParser {
 

@@ -1,5 +1,5 @@
-var assert = require('assert');
-var Api = require('../api/api.js');
+const assert = require('assert');
+const Api = require('../index.js');
 
 describe('get card by id', () => {
     it('should return nissa steward of elements', async () => {

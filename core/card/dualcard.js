@@ -1,4 +1,4 @@
-var Card = require('./card.js');
+const Card = require('./card.js');
 
 module.exports = class DualCard extends Card {
 
