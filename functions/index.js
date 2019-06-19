@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 var ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-var CommandParser = require('./util/commandparser.js');
-var CommandCallback = require('./util/commandcallback.js');
+var CommandParser = require('./util/commandparser.js.js');
+var CommandCallback = require('./util/commandcallback.js.js');
 
 exports.scrybot = functions.https.onRequest((request, response) => {
     let app = new ActionsSdkApp({request, response});

@@ -1,4 +1,4 @@
-var Speaker = require('./speaker.js');
+const Speaker = require('./speaker.js');
 
 module.exports = class Renderer {
 

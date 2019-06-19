@@ -1,6 +1,6 @@
-var Card = require('./card.js');
-var SplitCard = require('./splitcard.js');
-var DualCard = require('./dualcard.js');
+const Card = require('./card.js');
+const SplitCard = require('./splitcard.js');
+const DualCard = require('./dualcard.js');
 
 module.exports = class CardFactory{
 

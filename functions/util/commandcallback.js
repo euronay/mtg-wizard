@@ -1,6 +1,6 @@
-var Api = require('../api/api.js');
-var DualCard = require('../card/dualcard.js');
-var Renderer = require('./renderer.js');
+const Api = require('mtg-wizard-core');
+const DualCard = require('mtg-wizard-core/card/dualcard');
+const Renderer = require('./renderer.js.js');
 
 module.exports = class CommandCallback {
 

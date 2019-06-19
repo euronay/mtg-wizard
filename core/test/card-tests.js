@@ -1,10 +1,10 @@
-var assert = require('assert');
-var CardFactory = require('../card/cardfactory.js');
-var SplitCard = require('../card/splitcard.js');
-var DualCard = require('../card/dualcard.js');
+const assert = require('assert');
+const CardFactory = require('../card/cardfactory.js');
+const SplitCard = require('../card/splitcard.js');
+const DualCard = require('../card/dualcard.js');
 
 //#region test data
-    var scavengingOozeData = {
+    const scavengingOozeData = {
         "object": "card",
         "id": "614d466e-f830-4a2f-8740-b416a15c67dd",
         "oracle_id": "1ff25f67-36a7-4cfa-a2b1-2135b5b6fb67",
@@ -107,7 +107,7 @@ var DualCard = require('../card/dualcard.js');
         }
     };
 
-    var chandraData = {
+    const chandraData = {
         "object": "card",
         "id": "49fdd0d3-7140-4c12-a41c-37eedd986d9e",
         "oracle_id": "0c2a9131-f3d7-4f71-8bcc-3c169574b2e3",
@@ -226,7 +226,7 @@ var DualCard = require('../card/dualcard.js');
         }
     };
 
-    var wearTearData =  {
+    const wearTearData =  {
         "object": "card",
         "id": "d169a3b2-18ae-4414-98ef-d879676fdcc0",
         "oracle_id": "9842734c-1eac-4509-a731-4c22017ae586",
@@ -347,7 +347,7 @@ var DualCard = require('../card/dualcard.js');
         }
     };
 
-    var nissaData = {
+    const nissaData = {
         "object": "card",
         "id": "ff0063da-ab6b-499d-8e87-8b34d46f0372",
         "oracle_id": "35754a21-9fba-4370-a254-292918a777ba",

@@ -1,5 +1,5 @@
-var CardFactory = require('../card/cardfactory.js');
-var request = require('request-promise');
+const CardFactory = require('./card/cardfactory.js');
+const request = require('request-promise');
 
 module.exports = class Api {
 
