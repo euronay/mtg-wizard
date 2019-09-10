@@ -68,7 +68,7 @@ module.exports = class CommandParser {
 
             // FLIP
             var flipCommands = ['flip', 'transform'];
-            if(context.card.layout === 'transform' && flipCommands.includes(commandText)){ //TODO meld
+            if(context.card.isDFC && flipCommands.includes(commandText)){ //TODO meld
                 return callback.flip(context.card);
             }
         }

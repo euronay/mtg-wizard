@@ -1,6 +1,6 @@
 module.exports = class Speaker {
     static speak(card){
-        return this.filterMana(`${card.rarity}. ${card.getManaCostAndType()}. ${card.getBodyText()}`);
+        return this.filterMana(`${card.rarity}. ${card.manaCostAndType}. ${card.bodyText}`);
     }
 
     static filterMana(text){
