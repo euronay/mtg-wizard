@@ -1,6 +1,5 @@
 const Api = require('mtg-wizard-core');
-const DualCard = require('mtg-wizard-core/card/dualcard');
-const Renderer = require('./renderer.js.js');
+const Renderer = require('./renderer.js');
 
 module.exports = class CommandCallback {
 
@@ -15,10 +14,12 @@ module.exports = class CommandCallback {
             var cards = await Api.searchCards(query)
 
             if(cards.length === 1){
+                console.log(`Saving card to context '${cards[0].name}'`);
                 this.app.data.card = cards[0];
                 this.app.ask(Renderer.renderCard(this.app, cards[0]));
             }
             else {
+                console.log(`Clearing context`);
                 this.app.data.card = null;
                 var list = this.app.buildList("Results");
                 
@@ -28,7 +29,7 @@ module.exports = class CommandCallback {
                 cards.forEach(card => {
                     cardsCount ++;
                     list.addItems(Renderer.renderListItem(this.app, card));  
-                    cardsToSpeak += `${card.name} from ${card.set_name},\n`;  
+                    cardsToSpeak += `${card.name} from ${card.setName},\n`;  
                 });
 
                 if(cardsCount <= 5){
@@ -78,7 +79,7 @@ module.exports = class CommandCallback {
             var list = this.app.buildList("Results");
             
             if(reprints.length === 1){
-                this.app.ask(`The only printing of ${this.app.data.card.name} is in ${this.app.data.card.set_name}. Find another card?`);
+                this.app.ask(`The only printing of ${this.app.data.card.name} is in ${this.app.data.card.setName}. Find another card?`);
             }
             else {
                 reprints.forEach(card => {
@@ -98,11 +99,8 @@ module.exports = class CommandCallback {
     flip(card){
         console.log(`Flip: ${card.name}`);
 
-        var dualCard = new DualCard();
-        Object.assign(dualCard, card);
-        dualCard.flip();
-        this.app.data.card = dualCard;
-        this.app.ask(Renderer.renderCard(this.app, dualCard));
+        card.flip();
+        this.app.ask(Renderer.renderCard(this.app, card));
     }
 
     askResponse(text, suggestions) {

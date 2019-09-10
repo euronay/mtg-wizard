@@ -5,20 +5,20 @@ module.exports = class Renderer {
     static renderCard(app, card){
 
         var displayCard = app.buildBasicCard()
-        .setTitle(card.getDisplayName())
-        .setSubtitle(card.getSetAndRarity())
+        .setTitle(card.displayName)
+        .setSubtitle(card.setAndRarity)
         .setImageDisplay('WHITE')
-        .addButton("View on Scryfall", card.scryfall_uri)
+        .addButton("View on Scryfall", card.data.scryfall_uri)
         .setBodyText(
-            `**${card.getManaCostAndType()}**\n  \n` + 
-            `${card.getBodyText()}\n  \n` + 
-            `*${card.getPrices()}*`
+            `**${card.manaCostAndType}**\n  \n` + 
+            `${card.bodyText}\n  \n` + 
+            `*USD: ${card.prices.usd} / EUR ${card.prices.eur}*`
         )
-        .setImage(card.getImage(), card.name);
+        .setImage(card.image, card.name);
 
         var response = app.buildRichResponse()
-        .addSimpleResponse({speech: `I found ${card.name} from ${card.set_name}. ${Speaker.speak(card)}. Can I help with anything else?`,
-            displayText: `I found ${card.name} from ${card.set_name}. Can I help with anything else?`})
+        .addSimpleResponse({speech: `I found ${card.name} from ${card.setName}. ${Speaker.speak(card)}. Can I help with anything else?`,
+            displayText: `I found ${card.name} from ${card.setName}. Can I help with anything else?`})
         .addBasicCard(displayCard);
         return response;
     }
@@ -27,8 +27,8 @@ module.exports = class Renderer {
         var listItem = app.buildOptionItem(card.id,
         [card.name])
         .setTitle(card.name)
-        .setDescription(`${card.getSetAndRarity()}  \n${card.getManaCostAndType()}`)
-        .setImage(card.getThumbnail(), card.name);
+        .setDescription(`${card.setAndRarity}  \n${card.manaCostAndType}`)
+        .setImage(card.thumbnail, card.name);
 
         if(showSet)
             listItem.setTitle(`${card.name} (${card.set})`);
